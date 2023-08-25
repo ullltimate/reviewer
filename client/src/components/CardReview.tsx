@@ -1,4 +1,5 @@
 import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function CardReview(props:any) {
 
@@ -14,7 +15,7 @@ function CardReview(props:any) {
                     <Card.Title>{props.name}</Card.Title>
       		        <Card.Text>{props.subtitle}</Card.Text>
                     <Card.Text className=''>{`Author's assessment: ${props.score}/10`}</Card.Text>
-      		        <Button variant="link" className='px-0'>view more</Button>
+      		        <Button variant="link" className='px-0'><Link to={`/review/${props.id}`}>view more</Link></Button>
       		    </Card.Body>
                 </Col>
             </Row>

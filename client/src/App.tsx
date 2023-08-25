@@ -17,7 +17,7 @@ function App() {
   	  <>
 		<Header />
 		<Container>
-			{reviews.map((el) => <CardReview key={el.id} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score}/>)}
+			{reviews.map((el) => <CardReview key={el.id} id={el.id} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score}/>)}
 		</Container>
   	  </>
   	)
