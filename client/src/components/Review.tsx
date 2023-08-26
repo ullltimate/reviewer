@@ -16,13 +16,12 @@ function Review() {
   	  <>
 		<Header />
         {
-            review 
-            && 
+            review  && 
             <Container>
-                <h2 className='text-center'>{review.nameReview}</h2>
+                <h2 className='my-5 text-center'>{review.nameReview}</h2>
                 <Row>
-                    <Col md={5}>
-                        <Image src={review.img} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                    <Col md={4} style={{maxHeight: 300}}>
+                        <Image src={review.img} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
                     </Col>
                     <Col>
                         <h3>{review.title}</h3>
