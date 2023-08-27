@@ -1,15 +1,13 @@
 import {  Button, Container, Form, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../hooks/useTheme';
 
 function Header(props: any) {
-    const {theme, setTheme} = useTheme();
 
     const handlerTheme = () => {
-        if (theme === 'light'){
-            setTheme('dark')
+        if (props.theme === 'light'){
+            props.setTheme('dark')
         } else {
-            setTheme('light')
+            props.setTheme('light')
         }
     }
 
@@ -29,7 +27,7 @@ function Header(props: any) {
                         preserveAspectRatio="xMidYMid meet"
                     >
                         <g transform="translate(0.000000,101.000000) scale(0.100000,-0.100000)"
-                        fill={(theme === 'light') ? '#000000' : '#dee2e6'} stroke="none">
+                        fill={(props.theme === 'light') ? '#000000' : '#dee2e6'} stroke="none">
                         <path d="M262 862 l-202 -117 0 -240 0 -240 198 -114 c108 -63 202 -114 207
                         -114 6 0 100 51 208 114 l197 114 0 240 0 241 -162 94 c-90 52 -181 104 -203
                         117 l-41 22 -202 -117z m205 -202 c58 0 67 -3 94 -29 38 -38 39 -87 4 -130
@@ -44,14 +42,14 @@ function Header(props: any) {
                 </Link>
                 <Nav className='align-items-center'>
                     <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{props.t('header.login')}</Link>
-                    <Button variant={theme} className='bg-transparent border-0' onClick={handlerTheme}>
+                    <Button variant={props.theme} className='bg-transparent border-0' onClick={handlerTheme}>
                         {
-                            theme === 'light' 
+                            props.theme === 'light' 
                             ? <i className="bi bi-moon-stars"></i>
                             : <i className="bi bi-brightness-high"></i>
                         }
                     </Button>
-                    <Button variant={theme} onClick={handleChangeLanguage} className="pe-0 bg-transparent border-0 text-uppercase">
+                    <Button variant={props.theme} onClick={handleChangeLanguage} className="pe-0 bg-transparent border-0 text-uppercase">
                         <i className="bi bi-globe"></i> {props.currentLanguage}
                     </Button>
                 </Nav>

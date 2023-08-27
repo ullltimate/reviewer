@@ -6,12 +6,14 @@ import { useEffect, useState } from 'react';
 import { arrayReviews } from './healpers/reviewers';
 import CardReview from './components/CardReview';
 import { useTranslation } from "react-i18next";
+import { useTheme } from './hooks/useTheme';
 
 function App() {
 	const [reviews, setReviews] = useState<any[]>([]);
 	const [key, setKey] = useState('recent');
 	const { t, i18n: {changeLanguage, language} } = useTranslation();
 	const [currentLanguage, setCurrentLanguage] = useState(language);
+	const {theme, setTheme} = useTheme();
 
 
 	useEffect(() => {
@@ -20,7 +22,7 @@ function App() {
 
   	return (
   	  <>
-		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t}/>
+		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
 		<Container>
 			<Tabs
     		  id="controlled-tab-example"
