@@ -2,8 +2,8 @@ import {  Button, Container, Form, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 
-function Header() {
-    const {theme, setTheme} = useTheme()
+function Header(props: any) {
+    const {theme, setTheme} = useTheme();
 
     const handlerTheme = () => {
         if (theme === 'light'){
@@ -11,6 +11,12 @@ function Header() {
         } else {
             setTheme('light')
         }
+    }
+
+    const handleChangeLanguage = () => {
+        const newLanguage = props.currentLanguage === "en" ? "ru" : "en";
+        props.setCurrentLanguage(newLanguage);
+        props.changeLanguage(newLanguage);
     }
 
     return (
@@ -37,7 +43,7 @@ function Header() {
                     <h1 className='m-0'>reviewer</h1>
                 </Link>
                 <Nav className='align-items-center'>
-                    <Link to={"/login"} className='p-3 text-decoration-none text-reset'>Login</Link>
+                    <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{props.t('login')}</Link>
                     <Button variant={theme} className='bg-transparent border-0' onClick={handlerTheme}>
                         {
                             theme === 'light' 
@@ -45,8 +51,8 @@ function Header() {
                             : <i className="bi bi-brightness-high"></i>
                         }
                     </Button>
-                    <Button variant={theme} className="pe-0 bg-transparent border-0">
-                        <i className="bi bi-globe"></i> EN
+                    <Button variant={theme} onClick={handleChangeLanguage} className="pe-0 bg-transparent border-0 text-uppercase">
+                        <i className="bi bi-globe"></i> {props.currentLanguage}
                     </Button>
                 </Nav>
             </Container>
@@ -54,11 +60,11 @@ function Header() {
                 <Form className="d-flex">
                     <Form.Control
                       type="search"
-                      placeholder="Search"
+                      placeholder={props.t('search')}
                       className="me-2"
                       aria-label="Search"
                     />
-                    <Button variant="outline-success">Search</Button>
+                    <Button variant="outline-success">{props.t('search')}</Button>
                 </Form>
             </Container>
         </Navbar>

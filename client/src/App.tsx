@@ -5,10 +5,14 @@ import { Container, Tab, Tabs } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { arrayReviews } from './healpers/reviewers';
 import CardReview from './components/CardReview';
+import { useTranslation } from "react-i18next";
 
 function App() {
 	const [reviews, setReviews] = useState<any[]>([]);
 	const [key, setKey] = useState('recent');
+	const { t, i18n: {changeLanguage, language} } = useTranslation();
+	const [currentLanguage, setCurrentLanguage] = useState(language);
+
 
 	useEffect(() => {
 		setReviews(arrayReviews);
@@ -16,7 +20,7 @@ function App() {
 
   	return (
   	  <>
-		<Header />
+		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t}/>
 		<Container>
 			<Tabs
     		  id="controlled-tab-example"
@@ -24,10 +28,10 @@ function App() {
     		  onSelect={(k: any) => setKey(k)}
     		  className="mb-3"
     		>
-    		  	<Tab eventKey="recent" title="Latest reviews">
+    		  	<Tab eventKey="recent" title={t('tabLatest')}>
 				  {reviews.slice().sort((a,b) => b.creationDate - a.creationDate).map((el) => <CardReview key={el.id} id={el.id} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat('ru').format(el.creationDate)}/>)}
     		  	</Tab>
-    		  	<Tab eventKey="rating" title="High rating">
+    		  	<Tab eventKey="rating" title={t('tabRating')}>
 				  {reviews.slice().sort((a,b) => b.score - a.score).map((el) => <CardReview key={el.id} id={el.id} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat('ru').format(el.creationDate)}/>)}
     		  	</Tab>
     		</Tabs>

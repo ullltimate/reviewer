@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Login from './components/Login.tsx';
 import Review from './components/Review.tsx';
+import './i18n';
 
 const router = createBrowserRouter([
   {
