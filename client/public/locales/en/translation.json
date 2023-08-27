@@ -1,6 +1,21 @@
 {
-    "login": "Login",
-    "search": "Search",
-    "tabLatest": "Latest reviews",
-    "tabRating": "High rating"
+    "header": {
+        "login": "Login",
+        "search": "Search"
+    },
+    "app": {
+        "tabLatest": "Latest reviews",
+        "tabRating": "High rating"
+    },
+    "cardReview": {
+        "score": "Author's assessment:",
+        "viewMore": "view more",
+        "posted": "Posted:"
+    },
+    "review": {
+        "score": "Author's assessment:",
+        "group": "Group:",
+        "posted": "Posted:",
+        "tags": "Tags:"
+    }
 }

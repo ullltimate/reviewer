@@ -43,7 +43,7 @@ function Header(props: any) {
                     <h1 className='m-0'>reviewer</h1>
                 </Link>
                 <Nav className='align-items-center'>
-                    <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{props.t('login')}</Link>
+                    <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{props.t('header.login')}</Link>
                     <Button variant={theme} className='bg-transparent border-0' onClick={handlerTheme}>
                         {
                             theme === 'light' 
@@ -60,11 +60,11 @@ function Header(props: any) {
                 <Form className="d-flex">
                     <Form.Control
                       type="search"
-                      placeholder={props.t('search')}
+                      placeholder={props.t('header.search')}
                       className="me-2"
                       aria-label="Search"
                     />
-                    <Button variant="outline-success">{props.t('search')}</Button>
+                    <Button variant="outline-success">{props.t('header.search')}</Button>
                 </Form>
             </Container>
         </Navbar>
