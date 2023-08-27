@@ -17,5 +17,11 @@
         "group": "Group:",
         "posted": "Posted:",
         "tags": "Tags:"
+    },
+    "loginPage": {
+        "title": "Welcome to reviewer",
+        "subtitle": "Enter your Untitled account details",
+        "btnGithub": "Login with GitHub",
+        "btnOther": "Other"
     }
 }

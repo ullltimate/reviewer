@@ -17,15 +17,15 @@ function Login() {
 					<Col>
 						<Card style={{ width: '22rem' }} className='mx-auto text-center'>
     			  			<Card.Body>
-							  	<Card.Title className='mb-3'>Welcome to reviewer</Card.Title>
+							  	<Card.Title className='mb-3'>{t('loginPage.title')}</Card.Title>
 								<Card.Subtitle className="mb-5 text-muted">
-									Enter your Untitled account details
+									{t('loginPage.subtitle')}
 								</Card.Subtitle>
 								<div className="d-grid gap-2">
       								<Button variant={theme === 'light' ? 'dark' : 'light'}>
-									  <i className="bi bi-github"></i> Login with GitHub
+									  <i className="bi bi-github"></i> {t('loginPage.btnGithub')}
 									</Button>
-									<Button variant={theme === 'light' ? 'dark' : 'light'}>other</Button>
+									<Button variant={theme === 'light' ? 'dark' : 'light'}>{t('loginPage.btnOther')}</Button>
 								</div>
 							</Card.Body>
     					</Card>
