@@ -8,6 +8,7 @@ import {
 import Login from './components/Login.tsx';
 import Review from './components/Review.tsx';
 import './i18n';
+import User from './components/User.tsx';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/review/:idReview",
     element: <Review />,
+  },
+  {
+    path: "/user",
+    element: <User />,
   },
 ]);
 

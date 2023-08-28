@@ -18,9 +18,6 @@ function Login() {
 						<Card style={{ width: '22rem' }} className='mx-auto text-center'>
     			  			<Card.Body>
 							  	<Card.Title className='mb-3'>{t('loginPage.title')}</Card.Title>
-								<Card.Subtitle className="mb-5 text-muted">
-									{t('loginPage.subtitle')}
-								</Card.Subtitle>
 								<div className="d-grid gap-2">
       								<Button variant={theme === 'light' ? 'dark' : 'light'}>
 									  <i className="bi bi-github"></i> {t('loginPage.btnGithub')}
