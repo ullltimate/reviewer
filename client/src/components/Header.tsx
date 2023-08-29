@@ -64,7 +64,7 @@ function Header(props: any) {
                     :<>  
                         <Button variant={props.theme} className='bg-transparent border-0' onClick={() => logOut()}>{props.t('header.logout')}</Button>
                         <Navbar.Text>
-                            Signed in as: <Link to={`/user/${userObject._id}`}>{userObject.name}</Link>
+                            {props.t('header.signed')} <Link to={`/user/${userObject._id}`}>{userObject.name}</Link>
                         </Navbar.Text>
                     </>
                     }

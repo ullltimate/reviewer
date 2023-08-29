@@ -2,7 +2,8 @@
     "header": {
         "login": "Login",
         "search": "Search",
-        "logout": "Log out"
+        "logout": "Log out",
+        "signed": "Signed in as:"
     },
     "app": {
         "tabLatest": "Latest reviews",

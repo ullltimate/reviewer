@@ -2,7 +2,8 @@
     "header":{
         "login": "Войти",
         "search": "Поиск",
-        "logout": "Выйти"
+        "logout": "Выйти",
+        "signed": "Авторизован как:"
     },
     "app":{
         "tabLatest": "Последние",
