@@ -1,7 +1,8 @@
 {
     "header": {
         "login": "Login",
-        "search": "Search"
+        "search": "Search",
+        "logout": "Log out"
     },
     "app": {
         "tabLatest": "Latest reviews",

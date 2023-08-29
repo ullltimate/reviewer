@@ -1,7 +1,10 @@
 import {  Button, Container, Form, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Header(props: any) {
+    const accessToken = localStorage.getItem("accessToken");
+	const navigate = useNavigate()
 
     const handlerTheme = () => {
         if (props.theme === 'light'){
@@ -16,6 +19,12 @@ function Header(props: any) {
         props.setCurrentLanguage(newLanguage);
         props.changeLanguage(newLanguage);
     }
+
+    const logOut = () => {
+		localStorage.removeItem("accessToken")
+		localStorage.removeItem("loginWith")
+		navigate("/")
+	}
 
     return (
         <>
@@ -41,7 +50,11 @@ function Header(props: any) {
                     <h1 className='m-0'>reviewer</h1>
                 </Link>
                 <Nav className='align-items-center'>
-                    <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{props.t('header.login')}</Link>
+                    {
+                    !accessToken 
+                    ? <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{props.t('header.login')}</Link>
+                    :<Button variant={props.theme} className='bg-transparent border-0' onClick={() => logOut()}>{props.t('header.logout')}</Button>
+                    }
                     <Button variant={props.theme} className='bg-transparent border-0' onClick={handlerTheme}>
                         {
                             props.theme === 'light' 

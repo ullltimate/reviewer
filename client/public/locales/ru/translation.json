@@ -1,7 +1,8 @@
 {
     "header":{
         "login": "Войти",
-        "search": "Поиск"
+        "search": "Поиск",
+        "logout": "Выйти"
     },
     "app":{
         "tabLatest": "Последние",

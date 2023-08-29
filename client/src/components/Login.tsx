@@ -9,6 +9,13 @@ function Login() {
 	const [currentLanguage, setCurrentLanguage] = useState(language);
 	const {theme, setTheme} = useTheme();
 
+	const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
+
+	const loginToGithub = () => {
+		localStorage.setItem("loginWith", "GitHub")
+		window.location.assign(`https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}`)
+	}
+
   	return (
   	  	<>
   	  		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
@@ -19,7 +26,7 @@ function Login() {
     			  			<Card.Body>
 							  	<Card.Title className='mb-3'>{t('loginPage.title')}</Card.Title>
 								<div className="d-grid gap-2">
-      								<Button variant={theme === 'light' ? 'dark' : 'light'}>
+      								<Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => loginToGithub()}>
 									  <i className="bi bi-github"></i> {t('loginPage.btnGithub')}
 									</Button>
 									<Button variant={theme === 'light' ? 'dark' : 'light'}>{t('loginPage.btnOther')}</Button>
