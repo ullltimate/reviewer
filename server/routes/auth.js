@@ -1,5 +1,7 @@
 const Router = require("express");
 const router = new Router();
+const User = require('../models/user')
+const jwt = require('jsonwebtoken');
 const dotenv = require("dotenv")
 dotenv.config();
 
@@ -14,11 +16,39 @@ router.get('/github/accessToken', async (req, res) => {
             },
         })
         const data = await response.json()
-        console.log(data);
+        //console.log(data);
         const token = data.access_token;
-        res.redirect(
-          `http://localhost:5173/user?access_token=${token}`
-        );
+        //console.log(token)
+        if(token){
+            const responseUser = await fetch(`http://localhost:7000/api/auth/github/userData?accessToken=${token}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            const dataUser = await responseUser.json();
+            //console.log(dataUser)
+            const responseUserAPP = await fetch(`http://localhost:7000/api/auth/registration`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    login: dataUser.login,
+                    name: dataUser.name,
+                    email: dataUser.email,
+                    loginWith: 'GitHub',
+                    img: dataUser.avatar_url,
+                }),
+            })
+            const dataUserApp = await responseUserAPP.json()
+            //console.log(dataUserApp)
+            res.redirect(
+                `http://localhost:5173/user/${dataUserApp}`
+              );
+        } else {
+            return res.status(400).json({message: `bad token GitHub`})
+        }
         //return res.json(data);
     } catch (e) {
         console.log(e);
@@ -37,6 +67,43 @@ router.get('/github/userData', async (req, res) => {
         })
         const data = await response.json()
         return res.json(data);
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
+router.post('/registration', async (req, res) => {
+    try {
+        const {login, name, email, loginWith, img, isAdmin} = req.body;
+        if (loginWith === "GitHub"){
+            const candidate = await User.findOne({login});
+            if (candidate){
+                return res.status(200).json(candidate._id)
+            } else {
+                const user = new User({login, name, email, loginWith, img, isAdmin});
+                await user.save();
+                return res.status(200).json(user._id)
+            }
+        }  
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
+router.post('/login', async (req, res) => {
+    try {
+        const {_id} = req.body;
+        const user = await User.findOne({_id});
+        if (!user){
+            return res.status(404).json({message: "User with this id not found"});
+        }
+        const token = jwt.sign({id: user.id}, process.env.SECRET_KEY, {expiresIn:"1h"});
+        return res.json({
+            token,
+            user: user
+        })
     } catch (e) {
         console.log(e);
         res.send({message: 'Server error'});

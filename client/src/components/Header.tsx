@@ -1,16 +1,23 @@
+import { useEffect, useState } from 'react';
 import {  Button, Container, Form, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 function Header(props: any) {
     const accessToken = localStorage.getItem("accessToken");
-	const navigate = useNavigate()
+    const user = localStorage.getItem('user');
+	const navigate = useNavigate();
+    const [userObject, setUserObject] = useState<any>();
+
+    useEffect(() => {
+        if (user) setUserObject(JSON.parse(user))
+    },[accessToken])
 
     const handlerTheme = () => {
         if (props.theme === 'light'){
-            props.setTheme('dark')
+            props.setTheme('dark');
         } else {
-            props.setTheme('light')
+            props.setTheme('light');
         }
     }
 
@@ -21,8 +28,9 @@ function Header(props: any) {
     }
 
     const logOut = () => {
-		localStorage.removeItem("accessToken")
-		localStorage.removeItem("loginWith")
+		localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+		localStorage.removeItem("loginWith");
 		navigate("/")
 	}
 
@@ -51,9 +59,14 @@ function Header(props: any) {
                 </Link>
                 <Nav className='align-items-center'>
                     {
-                    !accessToken 
+                    !accessToken || !userObject
                     ? <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{props.t('header.login')}</Link>
-                    :<Button variant={props.theme} className='bg-transparent border-0' onClick={() => logOut()}>{props.t('header.logout')}</Button>
+                    :<>  
+                        <Button variant={props.theme} className='bg-transparent border-0' onClick={() => logOut()}>{props.t('header.logout')}</Button>
+                        <Navbar.Text>
+                            Signed in as: <Link to={`/user/${userObject._id}`}>{userObject.name}</Link>
+                        </Navbar.Text>
+                    </>
                     }
                     <Button variant={props.theme} className='bg-transparent border-0' onClick={handlerTheme}>
                         {

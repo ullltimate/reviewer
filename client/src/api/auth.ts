@@ -1,14 +1,13 @@
 import axios from "axios"
 
-export const getUserDataGithub = async (accessToken: string, setUserDataGithub:any) => {
+export const getUser = async (_id: string, setUser: any) => {
 	try {
-        const  data  = await axios.get(`http://localhost:7000/api/auth/github/userData?accessToken=${accessToken}`, {
-            headers: {
-                "Content-Type": "application/json",
-            },
+        const  response  = await axios.post(`http://localhost:7000/api/auth/login`, {
+            _id,
         })
-        console.log(data.data)
-        setUserDataGithub(data.data)
+        localStorage.setItem('accessToken', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+        setUser(response.data.user)
     } catch (error) {
         console.log(error)
     }

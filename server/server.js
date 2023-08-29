@@ -1,5 +1,5 @@
 const express = require("express");
-//const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 var cors = require("cors");
 const http = require('http');
 const app = express();
@@ -18,8 +18,8 @@ app.use('/api/auth', auth);
 
 const start = async () => {
     try {
-        //await mongoose.connect(config.get('dbUrl'));
-        //console.log('connected database')
+        await mongoose.connect(process.env.DB_URL);
+        console.log('connected database')
         server.listen(PORT, () => {
             console.log('Server started on port ', PORT)
         });
