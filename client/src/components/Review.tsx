@@ -4,12 +4,14 @@ import { Col, Container, Row, Image } from 'react-bootstrap';
 import { arrayReviews } from '../healpers/reviewers';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
+import { useTheme } from '../hooks/useTheme';
 
 function Review() {
     const params = useParams();
     const [review, setReview] = useState<any>();
     const { t, i18n: {changeLanguage, language} } = useTranslation();
 	const [currentLanguage, setCurrentLanguage] = useState(language);
+    const {theme, setTheme} = useTheme();
 
     useEffect(()=>{
         setReview(arrayReviews.find((el) => String(el.id) === params.idReview))
@@ -17,7 +19,7 @@ function Review() {
 
   	return (
   	  <>
-		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t}/>
+		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
         {
             review  && 
             <Container>
