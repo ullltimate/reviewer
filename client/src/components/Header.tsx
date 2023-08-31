@@ -61,12 +61,7 @@ function Header(props: any) {
                     {
                     !accessToken || !userObject
                     ? <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{props.t('header.login')}</Link>
-                    :<>  
-                        <Button variant={props.theme} className='bg-transparent border-0' onClick={() => logOut()}>{props.t('header.logout')}</Button>
-                        <Navbar.Text>
-                            {props.t('header.signed')} <Link to={`/user/${userObject._id}`}>{userObject.name}</Link>
-                        </Navbar.Text>
-                    </>
+                    : <Button variant={props.theme} className='bg-transparent border-0' onClick={() => logOut()}>{props.t('header.logout')}</Button>
                     }
                     <Button variant={props.theme} className='bg-transparent border-0' onClick={handlerTheme}>
                         {
@@ -79,6 +74,14 @@ function Header(props: any) {
                         <i className="bi bi-globe"></i> {props.currentLanguage}
                     </Button>
                 </Nav>
+            </Container>
+            <Container className='justify-content-end'>
+                {
+                    userObject && 
+                    <Navbar.Text className='pt-0'>
+                        {props.t('header.signed')} <Link to={`/user/${userObject._id}`}>{userObject.name}</Link>
+                    </Navbar.Text>
+                }
             </Container>
             <Container className='justify-content-end'>
                 <Form className="d-flex">
