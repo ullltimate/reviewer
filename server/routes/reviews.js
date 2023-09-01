@@ -22,7 +22,7 @@ router.post('/autor', async(req, res) => {
             return res.status(404).json({message: "Reviews with this Autor not found"});
         }
         return res.status(200).json(reviews)
-    } catch (error) {
+    } catch (e) {
         console.log(e);
         res.send({message: 'Server error'});
     }
@@ -46,7 +46,38 @@ router.get('/:id', async (req, res) => {
             return res.status(404).json({message: "Review with this id not found"});
         }
         return res.status(200).json(review);
-    } catch (error) {
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const _id = req.params.id;
+        const review = await Review.findOne({_id})
+        if(!review){
+            return res.status(404).json({message: "Review with this id not found"});
+        }
+        await Review.deleteOne({_id});
+        return res.status(200).json({message: 'Review with this id remove'});
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
+router.put('/:id', async (req, res) => {
+    try {
+        const _id = req.params.id;
+        const {nameReview, title, group, tags, description, img, creationDate, score, idAutor} = req.body;
+        const review = await Review.findOne({_id});
+        if(!review){
+            return res.status(404).json({message: "Review with this id not found"});
+        }
+        await Review.updateOne({_id}, {$set: {nameReview: nameReview, title: title, group: group, tags: tags, description: description, img: img, creationDate: creationDate, score: score, idAutor: idAutor}});
+        return res.status(200).json({message: `Review ${_id} update`});
+    } catch (e) {
         console.log(e);
         res.send({message: 'Server error'});
     }
