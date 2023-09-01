@@ -29,7 +29,7 @@ function CreateReview(props: any){
       				</Form.Group>
                     <Row>
                         <Col>
-                            <Select name={'Group:'} array={group}/>
+                            <Select name={'Group:'} options={group}/>
                         </Col>
                         <Col>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">

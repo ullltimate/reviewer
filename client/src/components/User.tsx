@@ -1,4 +1,4 @@
-import { Button, Col, Container, Row, Image, Badge, Stack } from 'react-bootstrap';
+import { Button, Col, Container, Row, Image, Badge } from 'react-bootstrap';
 import Header from './Header';
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from 'react';
@@ -7,8 +7,9 @@ import { useParams } from 'react-router-dom';
 import { getUser } from '../api/auth';
 import CreateReview from './CreateReview';
 import Select from './Select';
-import { arrayReviews } from '../healpers/reviewers';
 import CardReview from './CardReview';
+import Tags from './Tags';
+import { getReviewsByAutor } from '../api/reviews';
 
 function User() {
 	const { t, i18n: {changeLanguage, language} } = useTranslation();
@@ -18,11 +19,16 @@ function User() {
 	const idUser = params.idUser;
 	const [user, setUser] = useState<any|null>(null);
 	const [showCreate, setShowCreate] = useState(false);
+	const [reviewsByAutor, setReviewsByAutor] = useState<any[]>([]);
+	const [allTags, setAllTags] = useState<any[]>([]);
 
 	const handleShow = () => setShowCreate(true);
 
 	useEffect(() => {
-		if (idUser) getUser(idUser, setUser)
+		if (idUser) {
+			getUser(idUser, setUser);
+			getReviewsByAutor(idUser, setReviewsByAutor, setAllTags);
+		}
 	},[])
 
   	return (
@@ -49,39 +55,14 @@ function User() {
       								Create review
       							</Button>
 								<CreateReview show={showCreate} onHide={() => setShowCreate(false)}/>
-								<Select />
-								<Select />
-								<Select />
-								<Stack direction="horizontal" gap={1} className='flex-wrap'>
-    								<Badge pill bg="primary-subtle">
-    								  Primary
-    								</Badge>
-    								<Badge pill bg="secondary-subtle">
-    								  Secondary
-    								</Badge>
-    								<Badge pill bg="success-subtle">
-    								  Success
-    								</Badge>
-    								<Badge pill bg="danger">
-    								  Danger
-    								</Badge>
-    								<Badge pill bg="warning" text="dark">
-    								  Warning
-    								</Badge>
-    								<Badge pill bg="info">
-    								  Info
-    								</Badge>
-    								<Badge pill bg="light" text="dark">
-    								  Light
-    								</Badge>
-    								<Badge pill bg="dark">
-    								  Dark
-    								</Badge>
-    							</Stack>
+								<Select name={'Sort by:'} options={['raiting', 'date']}/>
+								<Select name={'Group:'} options={['movies', 'books', 'games']}/>
+								<Select name={'Tags:'} options={allTags}/>
+								<Tags tags={allTags}/>
 							</Col>
 							<Col>
 								{
-									arrayReviews.map((el) => <CardReview key={el.id} id={el.id} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}/>)
+									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}/>)
 								}
 							</Col>
 						</Row>

@@ -9,3 +9,15 @@ export const getAllReviews = async (setAllReviews: any) => {
         console.log(error)
     }
 }
+
+export const getReviewsByAutor = async (idAutor: string, setReviewsByAutor: any, setAllTags: any) => {
+    try {
+        const  response  = await axios.post(`${urlAPI}/api/reviews/autor`, {
+            idAutor,
+        })
+        setReviewsByAutor(response.data)
+        setAllTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())))
+    } catch (error) {
+        console.log(error)
+    }
+}
