@@ -1,8 +1,9 @@
-import axios from "axios"
+import axios from "axios";
+import { urlAPI } from "../healpers/healper";
 
 export const getUser = async (_id: string, setUser: any) => {
 	try {
-        const  response  = await axios.post(`http://localhost:7000/api/auth/login`, {
+        const  response  = await axios.post(`${urlAPI}/api/auth/login`, {
             _id,
         })
         localStorage.setItem('accessToken', response.data.token);
