@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import {  Button, Container, Form, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { IUser } from '../types/types';
 
 function Header(props: any) {
-    const accessToken = localStorage.getItem("accessToken");
-    const user = localStorage.getItem('user');
+    const accessToken: string | null = localStorage.getItem("accessToken");
+    const user: string | null = localStorage.getItem('user');
 	const navigate = useNavigate();
-    const [userObject, setUserObject] = useState<any>();
+    const [userObject, setUserObject] = useState<IUser>();
 
     useEffect(() => {
         if (user) setUserObject(JSON.parse(user))

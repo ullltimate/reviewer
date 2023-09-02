@@ -9,7 +9,7 @@ function Login() {
 	const [currentLanguage, setCurrentLanguage] = useState(language);
 	const {theme, setTheme} = useTheme();
 
-	const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
+	const GITHUB_CLIENT_ID: string = import.meta.env.VITE_GITHUB_CLIENT_ID;
 
 	const loginToGithub = () => {
 		localStorage.setItem("loginWith", "GitHub")

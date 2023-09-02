@@ -10,6 +10,7 @@ import Select from './Select';
 import CardReview from './CardReview';
 import Tags from './Tags';
 import { getReviewsByAutor } from '../api/reviews';
+import { IReview, IUser } from '../types/types';
 
 function User() {
 	const { t, i18n: {changeLanguage, language} } = useTranslation();
@@ -17,10 +18,10 @@ function User() {
 	const {theme, setTheme} = useTheme();
 	const params = useParams();
 	const idUser = params.idUser;
-	const [user, setUser] = useState<any|null>(null);
-	const [showCreate, setShowCreate] = useState(false);
-	const [reviewsByAutor, setReviewsByAutor] = useState<any[]>([]);
-	const [allTags, setAllTags] = useState<any[]>([]);
+	const [user, setUser] = useState<IUser|null>(null);
+	const [showCreate, setShowCreate] = useState<boolean>(false);
+	const [reviewsByAutor, setReviewsByAutor] = useState<IReview[]>([]);
+	const [allTags, setAllTags] = useState<string[]>([]);
 
 	const handleShow = () => setShowCreate(true);
 

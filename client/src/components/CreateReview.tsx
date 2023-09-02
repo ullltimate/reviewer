@@ -2,7 +2,7 @@ import { Modal, Form, Button, Col, Row } from "react-bootstrap"
 import Select from "./Select"
 
 function CreateReview(props: any){
-    const group = ['movies', 'books', 'games'];
+    const group: string[] = ['movies', 'books', 'games'];
 
     return (
     <>

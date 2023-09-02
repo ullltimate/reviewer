@@ -7,13 +7,14 @@ import CardReview from './components/CardReview';
 import { useTranslation } from "react-i18next";
 import { useTheme } from './hooks/useTheme';
 import { getAllReviews } from './api/reviews';
+import { IReview } from './types/types';
 
 function App() {
 	const [key, setKey] = useState('recent');
 	const { t, i18n: {changeLanguage, language} } = useTranslation();
 	const [currentLanguage, setCurrentLanguage] = useState(language);
 	const {theme, setTheme} = useTheme();
-	const [allReviews, setAllReviews] = useState<any[]>([]);
+	const [allReviews, setAllReviews] = useState<IReview[]>([]);
 
 
 	useEffect(() => {
