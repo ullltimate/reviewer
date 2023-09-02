@@ -1,20 +1,22 @@
 import { useParams } from 'react-router-dom';
 import Header from './Header';
 import { Col, Container, Row, Image } from 'react-bootstrap';
-import { arrayReviews } from '../healpers/reviewers';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useTheme } from '../hooks/useTheme';
+import { getReview } from '../api/reviews';
+import { IReview } from '../types/types';
 
 function Review() {
     const params = useParams();
-    const [review, setReview] = useState<any>();
+    const idReview: string | undefined = params.idReview;
+    const [review, setReview] = useState<IReview>();
     const { t, i18n: {changeLanguage, language} } = useTranslation();
 	const [currentLanguage, setCurrentLanguage] = useState(language);
     const {theme, setTheme} = useTheme();
 
     useEffect(()=>{
-        setReview(arrayReviews.find((el) => String(el.id) === params.idReview))
+        if (idReview) getReview(idReview, setReview);
     },[])
 
   	return (

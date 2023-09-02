@@ -21,3 +21,12 @@ export const getReviewsByAutor = async (idAutor: string, setReviewsByAutor: any,
         console.log(error)
     }
 }
+
+export const getReview = async (id: string, setReview: any) => {
+	try {
+        const  response  = await axios.get(`${urlAPI}/api/reviews/${id}`)
+        setReview(response.data)
+    } catch (error) {
+        console.log(error)
+    }
+}
