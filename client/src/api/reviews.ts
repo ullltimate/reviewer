@@ -30,3 +30,20 @@ export const getReview = async (id: string, setReview: any) => {
         console.log(error)
     }
 }
+
+export const createReview = async (nameReview: string, title: string, group: string, score: number, tags: string[], description: string, idAutor: string) => {
+	try {
+        const response  = await axios.post(`${urlAPI}/api/reviews/newReview`, {
+            nameReview,
+            title,
+            group,
+            tags,
+            description,
+            score,
+            idAutor
+        })
+        console.log(response.data.message)
+    } catch (error) {
+        console.log(error)
+    }
+}
