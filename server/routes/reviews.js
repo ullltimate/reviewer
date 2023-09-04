@@ -28,6 +28,22 @@ router.post('/autor', async(req, res) => {
     }
 })
 
+router.post('/filters', async(req, res) => {
+    try {
+        const {idAutor, group, tags} = req.body;
+        let filersReviews;
+        if(!group){
+            filersReviews = await Review.find({idAutor: idAutor, tags: {$in: tags}});
+        } else {
+            filersReviews = await Review.find({idAutor: idAutor, group: group, tags: {$in: tags}});
+        }
+        return res.json(filersReviews)
+    } catch(e){
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
 router.get('/', async (req, res) => {
     try {
         const reviews = await Review.find();
