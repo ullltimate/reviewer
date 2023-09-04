@@ -13,7 +13,7 @@ export interface IReview {
     idAutor: string,
     nameReview: string,
     title: string,
-    group: boolean,
+    group: string,
     creationDate: number,
     score: number,
     description: string,

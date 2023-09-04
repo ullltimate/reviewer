@@ -28,8 +28,11 @@ function CardReview(props:any) {
                         user && 
                         (JSON.parse(user)._id === props.autor) 
                         ? 
-                            <Col md={1} className='p-0'>
-                                <Button variant="outline-secondary" onClick={() => removeReview(props.id)}>
+                            <Col md={2} className='p-0'>
+                                <Button variant="outline-secondary border-0" onClick={() => props.handleShow()}>
+                                    <small><i className="bi bi-pencil-square"></i></small>
+                                </Button>
+                                <Button variant="outline-secondary border-0" onClick={() => removeReview(props.id)}>
                                     <small><i className="bi bi-trash3"></i></small>
                                 </Button>
                             </Col>

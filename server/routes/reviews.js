@@ -70,12 +70,12 @@ router.delete('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const _id = req.params.id;
-        const {nameReview, title, group, tags, description, img, creationDate, score, idAutor} = req.body;
+        const {nameReview, title, group, tags, description, img, score} = req.body;
         const review = await Review.findOne({_id});
         if(!review){
             return res.status(404).json({message: "Review with this id not found"});
         }
-        await Review.updateOne({_id}, {$set: {nameReview: nameReview, title: title, group: group, tags: tags, description: description, img: img, creationDate: creationDate, score: score, idAutor: idAutor}});
+        await Review.updateOne({_id}, {$set: {nameReview: nameReview, title: title, group: group, tags: tags, description: description, img: img, score: score}});
         return res.status(200).json({message: `Review ${_id} update`});
     } catch (e) {
         console.log(e);

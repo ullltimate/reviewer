@@ -1,9 +1,10 @@
 import { Modal, Form, Button, Col, Row } from "react-bootstrap"
 import Select from "./Select"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { createReview } from "../api/reviews";
+import { createReview, getReview, updateReview } from "../api/reviews";
 import { checkInputs, resetInputs } from "../healpers/healper";
+import { IReview } from "../types/types";
 
 function CreateReview(props: any){
     const groups: string[] = ['movies', 'books', 'games'];
@@ -15,16 +16,47 @@ function CreateReview(props: any){
 	const [description, setDescription] = useState('');
 	const params = useParams();
 	const [warning, setWarning] = useState(false);
-	console.log(Number(score))
+	const [review, setReview] = useState<IReview | null>(null)
+	const idReview = props.update;
+	//console.log(props.update)
+	//console.log(review)
+	//console.log(Number(score))
 	//console.log(params.idUser)
 	//console.log(tags.split('#').slice(1))
 	//console.log(description)
+	//console.log(title)
+
+	useEffect(() => {
+		(props.update != '') ? getReview(props.update, setReview) : setReview(null);
+	}, [idReview])
+
+	useEffect(() => {
+		if(review){
+			setNameReview(review.nameReview);
+			setTitle(review.title);
+			setGroup(review.group);
+			setScore(String(review.score));
+			setTags(`#${review.tags.join('#')}`);
+			setDescription(review.description);
+		} else {
+			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setScore]);
+		}
+	},[review])
+
 	async function save(){
 		if(checkInputs([nameReview, title, group, tags, description, score])){
 			if (params.idUser) await createReview(nameReview, title, group, Number(score), tags.split('#').slice(1), description, params.idUser);
 			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setScore]);
 			setWarning(false);
-			props.onHide;
+		} else {
+			setWarning(true);
+		}
+	}
+
+	async function update() {
+		if(checkInputs([nameReview, title, group, tags, description, score])){
+			await updateReview(props.update, nameReview, title, group, Number(score), tags.split('#').slice(1), description);
+			setWarning(false);
 		} else {
 			setWarning(true);
 		}
@@ -107,7 +139,7 @@ function CreateReview(props: any){
       			<Button variant="secondary" onClick={props.onHide}>
       			  Close
       			</Button>
-      			<Button variant="primary" onClick={() => save()}>
+      			<Button variant="primary" onClick={() => (props.update === '') ? save() : update()}>
       			  Save Changes
       			</Button>
       		</Modal.Footer>

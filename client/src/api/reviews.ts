@@ -56,3 +56,19 @@ export const removeReview = async (id: string) => {
         console.log(error)
     }
 }
+
+export const updateReview = async (id: string, nameReview: string, title: string, group: string, score: number, tags: string[], description: string) => {
+    try {
+        const response = await axios.put(`${urlAPI}/api/reviews/${id}`, {
+            nameReview,
+            title,
+            group,
+            tags,
+            description,
+            score,
+        })
+        console.log(response.data)
+    } catch (error) {
+        console.log(error)
+    }
+}

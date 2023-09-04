@@ -22,8 +22,11 @@ function User() {
 	const [showCreate, setShowCreate] = useState<boolean>(false);
 	const [reviewsByAutor, setReviewsByAutor] = useState<IReview[]>([]);
 	const [allTags, setAllTags] = useState<string[]>([]);
+	const [edit, setEdit] = useState(false);
+	const [editReview, setEditReview] = useState('');
 
-	const handleShow = () => setShowCreate(true);
+	const handleShow = () => {setEdit(false); setShowCreate(true)};
+	const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
 
 	useEffect(() => {
 		if (idUser) {
@@ -55,7 +58,7 @@ function User() {
 								<Button variant="outline-success" className='mb-3' onClick={() => handleShow()}>
       								Create review
       							</Button>
-								<CreateReview show={showCreate} onHide={() => setShowCreate(false)}/>
+								<CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>
 								<Select name={'Sort by:'} options={['raiting', 'date']}/>
 								<Select name={'Group:'} options={['movies', 'books', 'games']}/>
 								<Select name={'Tags:'} options={allTags}/>
@@ -63,7 +66,7 @@ function User() {
 							</Col>
 							<Col>
 								{
-									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}/>)
+									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)}/>)
 								}
 							</Col>
 						</Row>
