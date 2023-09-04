@@ -44,7 +44,7 @@ function CreateReview(props: any){
 	},[review])
 
 	async function save(){
-		if(checkInputs([nameReview, title, group, tags, description, score])){
+		if(checkInputs([nameReview, title, group, description, score])){
 			if (params.idUser) await createReview(nameReview, title, group, Number(score), tags.split('#').slice(1), description, params.idUser);
 			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setScore]);
 			setWarning(false);
@@ -54,7 +54,7 @@ function CreateReview(props: any){
 	}
 
 	async function update() {
-		if(checkInputs([nameReview, title, group, tags, description, score])){
+		if(checkInputs([nameReview, title, group, description, score])){
 			await updateReview(props.update, nameReview, title, group, Number(score), tags.split('#').slice(1), description);
 			setWarning(false);
 		} else {
@@ -116,7 +116,6 @@ function CreateReview(props: any){
       						type="text"
 							value={tags}
 							onChange={(e) => setTags(e.target.value)}
-							required
       						placeholder="Enter your tags with #"
       					/>
       				</Form.Group>
@@ -133,7 +132,7 @@ function CreateReview(props: any){
 						rows={3} />
       				</Form.Group>
       			</Form>
-				{warning ? <p className="text-center text-danger">Please fill in all field!</p> : <p></p>}
+				{warning ? <p className="text-center text-danger">Please fill in all field!<br/> Tags field is optional.</p> : <p></p>}
       		</Modal.Body>
       		<Modal.Footer>
       			<Button variant="secondary" onClick={props.onHide}>
