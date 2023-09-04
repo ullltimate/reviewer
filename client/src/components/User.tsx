@@ -63,7 +63,7 @@ function User() {
 							</Col>
 							<Col>
 								{
-									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}/>)
+									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}/>)
 								}
 							</Col>
 						</Row>

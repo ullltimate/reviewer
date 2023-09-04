@@ -32,10 +32,10 @@ function App() {
     		  className="mb-3"
     		>
     		  	<Tab eventKey="recent" title={t('app.tabLatest')}>
-				  {allReviews.slice().sort((a,b) => b.creationDate - a.creationDate).map((el) => <CardReview key={el._id} id={el._id} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}/>)}
+				  {allReviews.slice().sort((a,b) => b.creationDate - a.creationDate).map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}/>)}
     		  	</Tab>
     		  	<Tab eventKey="rating" title={t('app.tabRating')}>
-				  {allReviews.slice().sort((a,b) => b.score - a.score).map((el) => <CardReview key={el._id} id={el._id} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}/>)}
+				  {allReviews.slice().sort((a,b) => b.score - a.score).map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}/>)}
     		  	</Tab>
     		</Tabs>
 		</Container>

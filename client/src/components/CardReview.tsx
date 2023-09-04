@@ -1,7 +1,9 @@
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { removeReview } from '../api/reviews';
 
 function CardReview(props:any) {
+    const user = localStorage.getItem('user');
 
   	return (
   	  <>
@@ -18,7 +20,22 @@ function CardReview(props:any) {
       		        <Button variant="link" className='px-0'><Link to={`/review/${props.id}`}>{props.t('cardReview.viewMore')}</Link></Button>
       		    </Card.Body>
                 <Card.Footer>
-                    <small className="text-muted">{props.t('cardReview.posted')} {props.postedDate}</small>
+                    <Row className='align-items-center'>
+                        <Col>
+                            <small className="text-muted">{props.t('cardReview.posted')} {props.postedDate}</small>
+                        </Col>
+                        {
+                        user && 
+                        (JSON.parse(user)._id === props.autor) 
+                        ? 
+                            <Col md={1} className='p-0'>
+                                <Button variant="outline-secondary" onClick={() => removeReview(props.id)}>
+                                    <small><i className="bi bi-trash3"></i></small>
+                                </Button>
+                            </Col>
+                        : ''
+                        }
+                    </Row>
                 </Card.Footer>
                 </Col>
             </Row>

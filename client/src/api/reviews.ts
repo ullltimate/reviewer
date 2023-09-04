@@ -47,3 +47,12 @@ export const createReview = async (nameReview: string, title: string, group: str
         console.log(error)
     }
 }
+
+export const removeReview = async (id: string) => {
+    try {
+        const response = await axios.delete(`${urlAPI}/api/reviews/${id}`);
+        console.log(response.data)
+    } catch (error) {
+        console.log(error)
+    }
+}
