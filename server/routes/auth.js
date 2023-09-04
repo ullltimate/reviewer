@@ -73,11 +73,55 @@ router.get('/github/userData', async (req, res) => {
     }
 })
 
+router.get('/google/userData', async (req, res) => {
+    try {
+        const accessToken = req.query.accessToken;
+        //console.log(accessToken)
+        const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+        const data = await response.json()
+        //console.log(data)
+        const responseUserAPP = await fetch(`http://localhost:7000/api/auth/registration`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    login: data.given_name,
+                    name: data.name,
+                    email: data.email,
+                    loginWith: 'Google',
+                    img: data.picture,
+                }),
+        })
+        const dataUserApp = await responseUserAPP.json()
+        return res.json(dataUserApp)
+      } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+      }
+})
+
 router.post('/registration', async (req, res) => {
     try {
         const {login, name, email, loginWith, img, isAdmin} = req.body;
         if (loginWith === "GitHub"){
             const candidate = await User.findOne({login});
+            if (candidate){
+                return res.status(200).json(candidate._id)
+            } else {
+                const user = new User({login, name, email, loginWith, img, isAdmin});
+                await user.save();
+                return res.status(200).json(user._id)
+            }
+        } else if(loginWith === "Google"){
+            const candidate = await User.findOne({email});
             if (candidate){
                 return res.status(200).json(candidate._id)
             } else {

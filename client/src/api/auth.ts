@@ -13,3 +13,17 @@ export const getUser = async (_id: string, setUser: any) => {
         console.log(error)
     }
 }
+
+export const getUserGoogle = async (accessToken: string, navigate: any) => {
+    try {
+        const response = await axios.get(`${urlAPI}/api/auth/google/userData?accessToken=${accessToken}`, {
+		    headers: {
+		    	"Content-Type": "application/json",
+		    },
+	    })
+        console.log(response)
+        navigate(`/user/${response.data}`)
+    } catch(error){
+        console.log(error)
+    }
+}

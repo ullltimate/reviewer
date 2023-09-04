@@ -81,7 +81,7 @@ export const filteredReviews = async (idAutor: string, group: string, tags: any[
             tags
         })
         setReviewsByAutor(response.data)
-        console.log(response.data)
+        //console.log(response.data)
     } catch (error) {
         console.log(error)
     }
