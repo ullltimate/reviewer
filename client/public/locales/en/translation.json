@@ -22,7 +22,31 @@
     },
     "loginPage": {
         "title": "Log in with another providers",
-        "btnGithub": "Login with GitHub",
-        "btnOther": "Other"
+        "btnGithub": " Login with GitHub",
+        "btnGoogle": " Login with Google"
+    },
+    "userPage": {
+        "btnCreate": "Create review",
+        "btnReset": "Reset filters",
+        "sort": "Sort by:",
+        "groups": "Group",
+        "tags": "Tags:",
+        "reviewNotFound": "Reviews not found"
+    },
+    "createReview":{
+        "createTitle": "Create new review",
+        "editTitle": "Edit your review",
+        "reviewTitle": "Review title",
+        "reviewTitlePlaceholder": "Enter review title",
+        "workTitle": "Title of the work",
+        "workTitlePlaceholder": "Enter title of the work",
+        "score":"Enter author's assessment:",
+        "tags": "Tags:",
+        "tagsPlaceholder": "Enter your tags with #",
+        "description": "Description",
+        "btnClose": "Close",
+        "btnSave": "Save Changes",
+        "checkInputs": "Please fill in all field!",
+        "checkInputsOptional": "Tags field is optional."
     }
 }

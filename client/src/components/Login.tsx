@@ -42,7 +42,7 @@ function Login() {
 									  <i className="bi bi-github"></i> {t('loginPage.btnGithub')}
 									</Button>
 									<Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => loginToGoogle()}>
-										<i className="bi bi-google"></i>{t('loginPage.btnOther')}
+										<i className="bi bi-google"></i>{t('loginPage.btnGoogle')}
 									</Button>
 								</div>
 							</Card.Body>

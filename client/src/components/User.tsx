@@ -9,7 +9,7 @@ import CreateReview from './CreateReview';
 import Select from './Select';
 import CardReview from './CardReview';
 import Tags from './Tags';
-import { filteredReviews, getReviewsByAutor } from '../api/reviews';
+import { filteredReviews, getAllTags, getReviewsByAutor } from '../api/reviews';
 import { IReview, IUser } from '../types/types';
 
 function User() {
@@ -34,6 +34,7 @@ function User() {
 	useEffect(() => {
 		if (idUser) {
 			getUser(idUser, setUser);
+			getAllTags(setAllTags, setOnTags)
 			getReviewsByAutor(idUser, setAllTags, setOnTags);
 		}
 	},[])
@@ -41,7 +42,6 @@ function User() {
 	useEffect(() => {
 		if(tag != '') setOnTags(Array.from(new Set(onTags.concat(tag))))
 	}, [tag])
-	console.log(reviewsByAutor)
 
 	useEffect(() => {
 		if(idUser) filteredReviews(idUser, group, onTags, setReviewsByAutor)
@@ -68,22 +68,22 @@ function User() {
 								<Badge bg="danger" className='mb-1'><i className="bi bi-suit-heart"></i>{'300'}</Badge>
 								<p className='mb-3'>{user.email}</p>
 								<Button variant="outline-success" className='w-100 mb-3' onClick={() => handleShow()}>
-      								Create review
+      								{t('userPage.btnCreate')}
       							</Button>
 								<Button variant="outline-success" className='w-100 mb-3' onClick={() => {setGroup(''); setTag(''); setOnTags(allTags)}}>
-									Reset filters
+									{t('userPage.btnReset')}
 								</Button>
 								<CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>
-								<Select name={'Sort by:'} options={['raiting', 'date']}/>
-								<Select name={'Group:'} options={['movies', 'books', 'games']} value={group} setValue={setGroup}/>
-								<Select name={'Tags:'} options={allTags} value={tag} setValue={setTag}/>
+								<Select name={t('userPage.sort')} options={['raiting', 'date']}/>
+								<Select name={t('userPage.groups')} options={['movies', 'books', 'games']} value={group} setValue={setGroup}/>
+								<Select name={t('userPage.tags')} options={allTags} value={tag} setValue={setTag}/>
 								<Tags tags={onTags} setOnTags={setOnTags}/>
 							</Col>
 							<Col>
 								{   (reviewsByAutor.length != 0) 
 									?
 									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)}/>)
-									: <h3 className='text-center mt-3'>Reviews with this filters not found</h3>
+									: <h3 className='text-center mt-3'>{t('userPage.reviewNotFound')}</h3>
 								}
 							</Col>
 						</Row>

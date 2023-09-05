@@ -5,8 +5,10 @@ import { useParams } from "react-router-dom";
 import { createReview, getReview, updateReview } from "../api/reviews";
 import { checkInputs, resetInputs } from "../healpers/healper";
 import { IReview } from "../types/types";
+import { useTranslation } from "react-i18next";
 
 function CreateReview(props: any){
+	const { t } = useTranslation();
     const groups: string[] = ['movies', 'books', 'games'];
 	const [nameReview, setNameReview] = useState('');
 	const [title, setTitle] = useState('');
@@ -66,34 +68,37 @@ function CreateReview(props: any){
     <>
         <Modal {...props}>
       		<Modal.Header closeButton>
-      			<Modal.Title>Create new review </Modal.Title>
+				{review 
+				? <Modal.Title>{t('createReview.editTitle')}</Modal.Title>
+				:<Modal.Title>{t('createReview.createTitle')}</Modal.Title>
+				}
       		</Modal.Header>
       		<Modal.Body>
       			<Form>
       				<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-      					<Form.Label>Review title</Form.Label>
+      					<Form.Label>{t('createReview.reviewTitle')}</Form.Label>
       					<Form.Control
       						type="text"
 							value={nameReview}
 							onChange={(e) => setNameReview(e.target.value)}
-      						placeholder="Enter review title"
+      						placeholder={t('createReview.reviewTitlePlaceholder')}
 							required
       						autoFocus
       					/>
       				</Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-      					<Form.Label>Title of the work</Form.Label>
+      					<Form.Label>{t('createReview.workTitle')}</Form.Label>
       					<Form.Control
       						type="text"
 							value={title}
 							onChange={(e) => setTitle(e.target.value)}
 							required
-      						placeholder="Enter review title"
+      						placeholder={t('createReview.workTitlePlaceholder')}
       					/>
       				</Form.Group>
                     <Row>
                         <Col>
-                            <Select name={'Group:'} options={groups} value={group} setValue={setGroup}/>
+                            <Select name={t('userPage.groups')} options={groups} value={group} setValue={setGroup}/>
                         </Col>
                         <Col>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -105,25 +110,25 @@ function CreateReview(props: any){
 									value={score}
 									onChange={(e) => Number(e.target.value)>10 ? setScore('10') : setScore(e.target.value)}
 									required
-									placeholder="Enter author`s assessment"
+									placeholder={t('createReview.score')}
       					        />
       				        </Form.Group>
                         </Col>
                     </Row>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-      					<Form.Label>Tags</Form.Label>
+      					<Form.Label>{t('createReview.tags')}</Form.Label>
       					<Form.Control
       						type="text"
 							value={tags}
 							onChange={(e) => setTags(e.target.value)}
-      						placeholder="Enter your tags with #"
+      						placeholder={t('createReview.tagsPlaceholder')}
       					/>
       				</Form.Group>
       				<Form.Group
       				    className="mb-3"
       				    controlId="exampleForm.ControlTextarea1"
       				>
-      				    <Form.Label>Example textarea</Form.Label>
+      				    <Form.Label>{t('createReview.description')}</Form.Label>
       				    <Form.Control 
 						as="textarea" 
 						value={description}
@@ -132,14 +137,14 @@ function CreateReview(props: any){
 						rows={3} />
       				</Form.Group>
       			</Form>
-				{warning ? <p className="text-center text-danger">Please fill in all field!<br/> Tags field is optional.</p> : <p></p>}
+				{warning ? <p className="text-center text-danger">{t('createReview.checkInputs')}<br/> {t('createReview.checkInputsOptional')}</p> : <p></p>}
       		</Modal.Body>
       		<Modal.Footer>
       			<Button variant="secondary" onClick={props.onHide}>
-      			  Close
+				  {t('createReview.btnClose')}
       			</Button>
       			<Button variant="primary" onClick={() => (props.update === '') ? save() : update()}>
-      			  Save Changes
+				  {t('createReview.btnSave')}
       			</Button>
       		</Modal.Footer>
       	</Modal>

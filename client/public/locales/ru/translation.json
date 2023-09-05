@@ -22,7 +22,31 @@
     },
     "loginPage": {
         "title": "Войти с помощью провадера:",
-        "btnGithub": "Войти с помощью GitHub",
-        "btnOther": "Другое"
+        "btnGithub": " Войти с помощью GitHub",
+        "btnGoogle": " Войти с помощью Google"
+    },
+    "userPage": {
+        "btnCreate": "Создать обзор",
+        "btnReset": "Сбросить фильтры",
+        "sort": "Сортировать по:",
+        "groups": "Группа:",
+        "tags": "Теги:",
+        "reviewNotFound": "Обзоры не найдены"
+    },
+    "createReview":{
+        "createTitle": "Создание нового обзора",
+        "editTitle": "Отредактируйте свой обзор",
+        "reviewTitle": "Название обзора",
+        "reviewTitlePlaceholder": "Введите название обзора",
+        "workTitle": "Название произведения",
+        "workTitlePlaceholder": "Введите название произведения",
+        "score":"Оценка автора:",
+        "tags": "Теги:",
+        "tagsPlaceholder": "Введите теги начиная с #",
+        "description": "Описание",
+        "btnClose": "Закрыть",
+        "btnSave": "Сохранить изменения",
+        "checkInputs": "Пожалуйста заполните все поля!",
+        "checkInputsOptional": "Поле тегов не обязательно."
     }
 }
