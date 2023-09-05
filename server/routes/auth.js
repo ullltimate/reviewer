@@ -112,7 +112,7 @@ router.post('/registration', async (req, res) => {
     try {
         const {login, name, email, loginWith, img, isAdmin} = req.body;
         if (loginWith === "GitHub"){
-            const candidate = await User.findOne({login});
+            const candidate = await User.findOne({login: login, loginWith: "GitHub"});
             if (candidate){
                 return res.status(200).json(candidate._id)
             } else {
@@ -121,7 +121,7 @@ router.post('/registration', async (req, res) => {
                 return res.status(200).json(user._id)
             }
         } else if(loginWith === "Google"){
-            const candidate = await User.findOne({email});
+            const candidate = await User.findOne({email: email, loginWith: "Google"});
             if (candidate){
                 return res.status(200).json(candidate._id)
             } else {
