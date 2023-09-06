@@ -7,6 +7,19 @@ router.post('/newReview', async (req, res) => {
         const {nameReview, title, group, tags, description, img, creationDate, score, idAutor} = req.body;
         const review = new Review({nameReview, title, group, tags, description, img, creationDate, score, idAutor});
         await review.save();
+        //console.log(review);
+        await fetch(`http://localhost:7000/api/likes`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idReview: review._id,
+                idAutor: review.idAutor,
+                likes: []
+            }),
+        })
+        //console.log(response.data)
         return res.status(200).json({message: 'Review was created'})
     } catch (e) {
         console.log(e);
