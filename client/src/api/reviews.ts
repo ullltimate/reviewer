@@ -20,13 +20,13 @@ export const getAllTags = async (setAllTags: any, setOnTags: any) => {
     }
 }
 
-export const getReviewsByAutor = async (idAutor: string, setAllTags: any, setOnTags: any) => {
+export const getReviewsByAutor = async (idAutor: string, setAllTags?: any, setOnTags?: any) => {
     try {
         const  response  = await axios.post(`${urlAPI}/api/reviews/autor`, {
             idAutor,
         })
-        setAllTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
-        setOnTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
+        //setAllTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
+        //setOnTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
     } catch (error) {
         console.log(error)
     }

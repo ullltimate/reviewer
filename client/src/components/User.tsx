@@ -35,9 +35,9 @@ function User() {
 		if (idUser) {
 			getUser(idUser, setUser);
 			getAllTags(setAllTags, setOnTags)
-			getReviewsByAutor(idUser, setAllTags, setOnTags);
+			getReviewsByAutor(idUser);
 		}
-	},[])
+	},[showCreate])
 
 	useEffect(() => {
 		if(tag != '') setOnTags(Array.from(new Set(onTags.concat(tag))))
