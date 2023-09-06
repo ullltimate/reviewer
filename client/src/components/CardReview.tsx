@@ -24,20 +24,26 @@ function CardReview(props:any) {
                         <Col>
                             <small className="text-muted">{props.t('cardReview.posted')} {props.postedDate}</small>
                         </Col>
-                        {
-                        user && 
-                        (JSON.parse(user)._id === props.autor) 
-                        ? 
-                            <Col md={2} className='p-0'>
-                                <Button variant="outline-secondary border-0" onClick={() => props.handleShow()}>
-                                    <small><i className="bi bi-pencil-square"></i></small>
-                                </Button>
-                                <Button variant="outline-secondary border-0" onClick={() => removeReview(props.id)}>
-                                    <small><i className="bi bi-trash3"></i></small>
-                                </Button>
-                            </Col>
-                        : ''
-                        }
+                        <Col className='p-0 text-end'>
+                            <small><span className='text-secondary'>0</span></small>
+                            <Button variant="outline-secondary border-0">
+                                <small><i className="bi bi-heart"></i></small>
+                            </Button>
+                            {
+                                user && 
+                                (JSON.parse(user)._id === props.autor) 
+                                ? 
+                                    <>
+                                        <Button variant="outline-secondary border-0" onClick={() => props.handleShow()}>
+                                            <small><i className="bi bi-pencil-square"></i></small>
+                                        </Button>
+                                        <Button variant="outline-secondary border-0" onClick={() => removeReview(props.id)}>
+                                            <small><i className="bi bi-trash3"></i></small>
+                                        </Button>
+                                    </>
+                                : ''
+                            }
+                        </Col>
                     </Row>
                 </Card.Footer>
                 </Col>
