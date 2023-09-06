@@ -11,6 +11,7 @@ import CardReview from './CardReview';
 import Tags from './Tags';
 import { filteredReviews, getAllTags, getReviewsByAutor } from '../api/reviews';
 import { IReview, IUser } from '../types/types';
+import { getLikesByAutor } from '../api/likes';
 
 function User() {
 	const { t, i18n: {changeLanguage, language} } = useTranslation();
@@ -27,6 +28,7 @@ function User() {
 	const [editReview, setEditReview] = useState('');
 	const [group, setGroup] = useState('');
 	const [tag, setTag] = useState('');
+	const [amoutLikes, setAmountLikes] = useState(0);
 
 	const handleShow = () => {setEdit(false); setShowCreate(true)};
 	const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
@@ -36,6 +38,7 @@ function User() {
 			getUser(idUser, setUser);
 			getAllTags(setAllTags, setOnTags)
 			getReviewsByAutor(idUser);
+			getLikesByAutor(idUser, setAmountLikes)
 		}
 	},[showCreate])
 
@@ -65,7 +68,7 @@ function User() {
 							<Col md={3} className='text-center'>
 								<Image src={user.img} className='mt-3' style={{ maxWidth: '8rem' }} roundedCircle />
 								<h5 className='mb-1'>{user.name}</h5>
-								<Badge bg="danger" className='mb-1'><i className="bi bi-suit-heart"></i>{'300'}</Badge>
+								<Badge bg="danger" className='mb-1'><i className="bi bi-suit-heart"></i>{amoutLikes}</Badge>
 								<p className='mb-3'>{user.email}</p>
 								<Button variant="outline-success" className='w-100 mb-3' onClick={() => handleShow()}>
       								{t('userPage.btnCreate')}

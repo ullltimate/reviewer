@@ -1,9 +1,34 @@
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { removeReview } from '../api/reviews';
+import { useEffect, useState } from 'react';
+import { addLikes, deleteLikes, getLikes } from '../api/likes';
 
 function CardReview(props:any) {
     const user = localStorage.getItem('user');
+    const [amountLikes, setAmountLikes] = useState(0);
+    const navigate = useNavigate();
+    const [userLike, setUserLike] = useState(false);
+    //console.log(props.id)
+    //console.log(props.autor)
+    useEffect(() => {
+        (user) ? getLikes(props.id, setAmountLikes, JSON.parse(user)._id, setUserLike) : getLikes(props.id, setAmountLikes)
+    },[userLike])
+
+    function like(){
+        if(user){
+            if(userLike){
+                deleteLikes(props.id, JSON.parse(user)._id);
+                setUserLike(false);
+            }else{
+                addLikes(props.id, props.autor, JSON.parse(user)._id);
+                setUserLike(true);
+            }
+        } else{
+            navigate('/login')
+        }
+    }
+    //console.log(userLike)
 
   	return (
   	  <>
@@ -25,9 +50,9 @@ function CardReview(props:any) {
                             <small className="text-muted">{props.t('cardReview.posted')} {props.postedDate}</small>
                         </Col>
                         <Col className='p-0 text-end'>
-                            <small><span className='text-secondary'>0</span></small>
-                            <Button variant="outline-secondary border-0">
-                                <small><i className="bi bi-heart"></i></small>
+                            <small><span className='text-secondary'>{amountLikes}</span></small>
+                            <Button variant="outline-secondary border-0" onClick={() => like()}>
+                                <small><i className={`bi bi-heart${(userLike)?'-fill':''}`}></i></small>
                             </Button>
                             {
                                 user && 

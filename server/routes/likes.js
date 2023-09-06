@@ -38,9 +38,6 @@ router.get('/autor/:id', async (req, res) => {
     try {
         const idAutor = req.params.id;
         const likedReview = await Like.find({idAutor})
-        if(!likedReview){
-            return res.status(404).json({message: "Autor has not likes"});
-        }
         return res.status(200).json(likedReview);
     } catch (e) {
         console.log(e);
@@ -53,7 +50,7 @@ router.get('/:id', async (req, res) => {
         const idReview = req.params.id;
         const likedReview = await Like.findOne({idReview});
         if(!likedReview){
-            return res.status(404).json({message: "Likes this review not found"});
+            return res.status(200).json(0);
         }
         return res.status(200).json(likedReview);
     } catch (e) {
