@@ -32,7 +32,7 @@ function Header(props: any) {
 		localStorage.removeItem("accessToken");
         localStorage.removeItem("user");
 		localStorage.removeItem("loginWith");
-		navigate("/")
+		navigate("/login")
 	}
 
     return (
