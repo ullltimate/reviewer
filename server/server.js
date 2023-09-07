@@ -6,7 +6,8 @@ const app = express();
 const server = http.createServer(app);
 const auth = require('./routes/auth.js');
 const reviews = require('./routes/reviews.js');
-const likes = require('./routes/likes.js')
+const likes = require('./routes/likes.js');
+const ratings = require('./routes/ratings.js');
 const dotenv = require("dotenv")
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api/auth', auth);
 app.use('/api/reviews', reviews);
 app.use('/api/likes', likes);
+app.use('/api/ratings', ratings)
 
 const start = async () => {
     try {

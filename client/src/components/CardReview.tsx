@@ -3,17 +3,26 @@ import { Link, useNavigate } from 'react-router-dom';
 import { removeReview } from '../api/reviews';
 import { useEffect, useState } from 'react';
 import { addLikes, deleteLikes, getLikes } from '../api/likes';
+import ReactStars from 'react-rating-star-with-type';
+import { addRating, getRating } from '../api/rating';
 
 function CardReview(props:any) {
     const user = localStorage.getItem('user');
     const [amountLikes, setAmountLikes] = useState(0);
     const navigate = useNavigate();
     const [userLike, setUserLike] = useState(false);
+    const [star, setStar] = useState(0);
+    const [editStar, setEditStar] = useState(true);
+    const [rating, setRating] = useState(0);
     //console.log(props.id)
     //console.log(props.autor)
     useEffect(() => {
-        (user) ? getLikes(props.id, setAmountLikes, JSON.parse(user)._id, setUserLike) : getLikes(props.id, setAmountLikes)
+        (user) ? getLikes(props.id, setAmountLikes, JSON.parse(user)._id, setUserLike) : getLikes(props.id, setAmountLikes);
     },[userLike])
+
+    useEffect(()=>{
+        (user) ? getRating(props.id, setRating, JSON.parse(user)._id, setStar, setEditStar,) : getRating(props.id, setRating);
+    },[star])
 
     function like(){
         if(user){
@@ -25,10 +34,25 @@ function CardReview(props:any) {
                 setUserLike(true);
             }
         } else{
-            navigate('/login')
+            navigate('/login');
         }
     }
     //console.log(userLike)
+
+    async function rate(nextValue: any){
+        if(user){
+            await addRating(props.id, JSON.parse(user)._id, nextValue);
+            setStar(nextValue);
+            setEditStar(false);
+        } else {
+            navigate('/login');
+        }
+    }
+    //const onChange=(nextValue: any)=>{
+    //    setStar(nextValue)
+    //    setEditStar(false)
+    //}
+    //console.log(star)
 
   	return (
   	  <>
@@ -39,10 +63,32 @@ function CardReview(props:any) {
                 </Col>
                 <Col>
                 <Card.Body className='pb-0'>
-                    <Card.Title>{props.name}</Card.Title>
+                    <Row>
+                        <Col>
+                            <Card.Title>{props.name}</Card.Title>
+                        </Col>
+                        <Col className='text-end' md={2}>
+                            <span>{rating}</span>
+                            <i className="bi bi-star-fill text-warning"></i>
+                        </Col>
+                    </Row>
       		        <Card.Text>{props.subtitle}</Card.Text>
                     <Card.Text className=''>{`${props.t('cardReview.score')} ${props.score}/10`}</Card.Text>
-      		        <Button variant="link" className='px-0'><Link to={`/review/${props.id}`}>{props.t('cardReview.viewMore')}</Link></Button>
+                    <Row className='align-items-center justify-content-between'>
+                        <Col>
+                            <Button variant="link" className='px-0'><Link to={`/review/${props.id}`}>{props.t('cardReview.viewMore')}</Link></Button>
+                        </Col>
+                        <Col>
+                            <ReactStars 
+                                key={`stars_${star}`}
+                                onChange={rate} 
+                                value={star}
+                                isEdit={editStar}  
+                                activeColors={["#ffc107"]} 
+                                style={{justifyContent: 'end'}}
+                            />
+                        </Col>
+                    </Row>
       		    </Card.Body>
                 <Card.Footer>
                     <Row className='align-items-center'>
