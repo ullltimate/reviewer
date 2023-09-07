@@ -14,8 +14,7 @@ function CardReview(props:any) {
     const [star, setStar] = useState(0);
     const [editStar, setEditStar] = useState(true);
     const [rating, setRating] = useState(0);
-    //console.log(props.id)
-    //console.log(props.autor)
+
     useEffect(() => {
         (user) ? getLikes(props.id, setAmountLikes, JSON.parse(user)._id, setUserLike) : getLikes(props.id, setAmountLikes);
     },[userLike])
@@ -37,7 +36,6 @@ function CardReview(props:any) {
             navigate('/login');
         }
     }
-    //console.log(userLike)
 
     async function rate(nextValue: any){
         if(user){
@@ -48,11 +46,6 @@ function CardReview(props:any) {
             navigate('/login');
         }
     }
-    //const onChange=(nextValue: any)=>{
-    //    setStar(nextValue)
-    //    setEditStar(false)
-    //}
-    //console.log(star)
 
   	return (
   	  <>

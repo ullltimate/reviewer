@@ -12,10 +12,7 @@ export const getRating = async (idReview: string, setRating: any, idUser?: strin
                 }
             }
             setRating(response.data.rating.map((el:any) => el.score).reduce((acc: any, number: any) => acc + number, 0)/response.data.rating.length)
-        } else {
-            setRating(0)
         }
-        console.log(response.data)
     } catch (error) {
         console.log(error)
     }
