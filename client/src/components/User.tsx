@@ -29,6 +29,7 @@ function User() {
 	const [group, setGroup] = useState('');
 	const [tag, setTag] = useState('');
 	const [amoutLikes, setAmountLikes] = useState(0);
+	const [isDeleted, setIsDeleted] = useState(false);
 
 	const handleShow = () => {setEdit(false); setShowCreate(true)};
 	const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
@@ -37,7 +38,7 @@ function User() {
 		if (idUser) {
 			getUser(idUser, setUser);
 			getAllTags(setAllTags, setOnTags)
-			getReviewsByAutor(idUser);
+			getReviewsByAutor(idUser, setReviewsByAutor);
 			getLikesByAutor(idUser, setAmountLikes)
 		}
 	},[showCreate])
@@ -48,7 +49,7 @@ function User() {
 
 	useEffect(() => {
 		if(idUser) filteredReviews(idUser, group, onTags, setReviewsByAutor)
-	},[group, onTags])
+	},[group, onTags, isDeleted])
 
   	return (
   	  	<>
@@ -85,7 +86,7 @@ function User() {
 							<Col>
 								{   (reviewsByAutor.length != 0) 
 									?
-									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)}/>)
+									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
 									: <h3 className='text-center mt-3'>{t('userPage.reviewNotFound')}</h3>
 								}
 							</Col>

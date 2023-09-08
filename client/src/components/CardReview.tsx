@@ -101,7 +101,7 @@ function CardReview(props:any) {
                                         <Button variant="outline-secondary border-0" onClick={() => props.handleShow()}>
                                             <small><i className="bi bi-pencil-square"></i></small>
                                         </Button>
-                                        <Button variant="outline-secondary border-0" onClick={() => removeReview(props.id)}>
+                                        <Button variant="outline-secondary border-0" onClick={() => removeReview(props.id, props.setIsDeleted)}>
                                             <small><i className="bi bi-trash3"></i></small>
                                         </Button>
                                     </>

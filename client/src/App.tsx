@@ -19,12 +19,13 @@ function App() {
 	const [showCreate, setShowCreate] = useState<boolean>(false);
 	const [edit, setEdit] = useState(false);
 	const [editReview, setEditReview] = useState('');
+	const [isDeleted, setIsDeleted] = useState(false);
 
 	const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
 
 	useEffect(() => {
 		getAllReviews(setAllReviews);
-	},[])
+	},[isDeleted])
 
   	return (
   	  <>
@@ -37,10 +38,10 @@ function App() {
     		  className="mb-3"
     		>
     		  	<Tab eventKey="recent" title={t('app.tabLatest')}>
-				  {allReviews.slice().sort((a,b) => b.creationDate - a.creationDate).map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)}/>)}
+				  {allReviews.slice().sort((a,b) => b.creationDate - a.creationDate).map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)}
     		  	</Tab>
     		  	<Tab eventKey="rating" title={t('app.tabRating')}>
-				  {allReviews.slice().sort((a,b) => b.score - a.score).map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}  handleShow={() => handleShowEdit(el._id)}/>)}
+				  {allReviews.slice().sort((a,b) => b.score - a.score).map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}  handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)}
     		  	</Tab>
     		</Tabs>
 			<CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>

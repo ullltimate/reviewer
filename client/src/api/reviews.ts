@@ -20,13 +20,12 @@ export const getAllTags = async (setAllTags: any, setOnTags: any) => {
     }
 }
 
-export const getReviewsByAutor = async (idAutor: string, setAllTags?: any, setOnTags?: any) => {
+export const getReviewsByAutor = async (idAutor: string, setReviewsByAutor: any) => {
     try {
         const  response  = await axios.post(`${urlAPI}/api/reviews/autor`, {
             idAutor,
         })
-        //setAllTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
-        //setOnTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
+        setReviewsByAutor(response.data)
     } catch (error) {
         console.log(error)
     }
@@ -58,10 +57,12 @@ export const createReview = async (nameReview: string, title: string, group: str
     }
 }
 
-export const removeReview = async (id: string) => {
+export const removeReview = async (id: string, setIsDeleted: any) => {
     try {
         const response = await axios.delete(`${urlAPI}/api/reviews/${id}`);
         console.log(response.data)
+        setIsDeleted(true);
+
     } catch (error) {
         console.log(error)
     }
