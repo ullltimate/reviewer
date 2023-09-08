@@ -19,4 +19,5 @@ export interface IReview {
     description: string,
     img: string,
     tags: string[],
+    averageRating: number,
 }

@@ -30,6 +30,7 @@ function User() {
 	const [tag, setTag] = useState('');
 	const [amoutLikes, setAmountLikes] = useState(0);
 	const [isDeleted, setIsDeleted] = useState(false);
+	const [sort, setSort] = useState('');
 
 	const handleShow = () => {setEdit(false); setShowCreate(true)};
 	const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
@@ -50,6 +51,11 @@ function User() {
 	useEffect(() => {
 		if(idUser) filteredReviews(idUser, group, onTags, setReviewsByAutor)
 	},[group, onTags, isDeleted])
+
+	useEffect(() => {
+		if(sort === 'date') setReviewsByAutor(() => [...reviewsByAutor.sort((a,b) => b.creationDate - a.creationDate)]);
+		if(sort === 'rating') setReviewsByAutor(() => [...reviewsByAutor.sort((a,b) => b.averageRating - a.averageRating)]);
+	},[sort])
 
   	return (
   	  	<>
@@ -74,11 +80,11 @@ function User() {
 								<Button variant="outline-success" className='w-100 mb-3' onClick={() => handleShow()}>
       								{t('userPage.btnCreate')}
       							</Button>
-								<Button variant="outline-success" className='w-100 mb-3' onClick={() => {setGroup(''); setTag(''); setOnTags(allTags)}}>
+								<Button variant="outline-success" className='w-100 mb-3' onClick={() => {setGroup(''); setTag(''); setOnTags(allTags); setSort('')}}>
 									{t('userPage.btnReset')}
 								</Button>
 								<CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>
-								<Select name={t('userPage.sort')} options={['raiting', 'date']}/>
+								<Select name={t('userPage.sort')} options={['rating', 'date']} value={sort} setValue={setSort}/>
 								<Select name={t('userPage.groups')} options={['movies', 'books', 'games']} value={group} setValue={setGroup}/>
 								<Select name={t('userPage.tags')} options={allTags} value={tag} setValue={setTag}/>
 								<Tags tags={onTags} setOnTags={setOnTags}/>

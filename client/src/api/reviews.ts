@@ -1,10 +1,15 @@
 import axios from "axios"
 import { urlAPI } from "../healpers/healper";
 
-export const getAllReviews = async (setAllReviews: any) => {
+export const getAllReviews = async (setAllReviews: any, key: string, setAmountAllReviews: any) => {
 	try {
-        const  response  = await axios.get(`${urlAPI}/api/reviews`)
-        setAllReviews(response.data)
+        const  response  = await axios.get(`${urlAPI}/api/reviews`);
+        if (key === 'recent'){
+            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.creationDate - a.creationDate)]);
+        } else {
+            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.averageRating - a.averageRating)]);
+        }
+        setAmountAllReviews(response.data.length)
     } catch (error) {
         console.log(error)
     }
@@ -102,7 +107,7 @@ export const updateRatingReview = async (id: string, averageRating: number) => {
         const response = await axios.put(`${urlAPI}/api/reviews/rating/${id}`, {
             averageRating
         })
-        console.log(response.data)
+        //console.log(response.data)
     } catch (error) {
         console.log(error)
     }
