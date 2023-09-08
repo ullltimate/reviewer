@@ -13,6 +13,7 @@ import CreateReview from './CreateReview';
 import { addComment, getComments } from '../api/comments';
 import { checkInputs, resetInputs } from '../healpers/healper';
 import CardComment from './CardComment';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 
 function Review() {
     const params = useParams();
@@ -151,7 +152,7 @@ function Review() {
                         </Row>
                     </Col>
                 </Row>
-                <p className='text-justify'>{review.description}</p>
+                <ReactMarkdown children={review.description}></ReactMarkdown>
                 <CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>
                 <h4>Comments {comments ? comments.length : 0}</h4>
                 {
