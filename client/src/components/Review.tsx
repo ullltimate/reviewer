@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
-import { Col, Container, Row, Image, Button } from 'react-bootstrap';
+import { Col, Container, Row, Image, Button, InputGroup, Form } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useTheme } from '../hooks/useTheme';
@@ -129,6 +129,17 @@ function Review() {
                 </Row>
                 <p className='text-justify'>{review.description}</p>
                 <CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>
+                <InputGroup className="mb-3">
+                    <Form.Control
+                      placeholder="Enter your comment"
+                      aria-label="Recipient's username"
+                      aria-describedby="basic-addon2"
+                    />
+                    <Button variant="outline-secondary" id="button-addon2">
+                        <i className="bi bi-send-fill"></i>
+                         Send
+                    </Button>
+                </InputGroup>
             </Container>
         }
   	  </>
