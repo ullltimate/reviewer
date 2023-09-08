@@ -112,4 +112,20 @@ router.put('/:id', async (req, res) => {
     }
 })
 
+router.put('/rating/:id', async (req, res) => {
+    try {
+        const _id = req.params.id;
+        const {averageRating} = req.body;
+        const review = await Review.findOne({_id});
+        if(!review){
+            return res.status(404).json({message: "Review with this id not found"});
+        }
+        await Review.updateOne({_id}, {$set: {averageRating: averageRating}});
+        return res.status(200).json({message: `Review ${_id} update`});
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
 module.exports = router

@@ -1,5 +1,6 @@
 import axios from "axios"
 import { urlAPI } from "../healpers/healper";
+import { updateRatingReview } from "./reviews";
 
 export const getRating = async (idReview: string, setRating: any, idUser?: string, setStar?: any, setEditStar?: any,) => {
 	try {
@@ -12,6 +13,7 @@ export const getRating = async (idReview: string, setRating: any, idUser?: strin
                 }
             }
             setRating(response.data.rating.map((el:any) => el.score).reduce((acc: any, number: any) => acc + number, 0)/response.data.rating.length)
+            updateRatingReview(idReview, response.data.rating.map((el:any) => el.score).reduce((acc: any, number: any) => acc + number, 0)/response.data.rating.length)
         }
     } catch (error) {
         console.log(error)

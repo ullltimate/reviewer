@@ -96,3 +96,14 @@ export const filteredReviews = async (idAutor: string, group: string, tags: any[
         console.log(error)
     }
 }
+
+export const updateRatingReview = async (id: string, averageRating: number) => {
+    try {
+        const response = await axios.put(`${urlAPI}/api/reviews/rating/${id}`, {
+            averageRating
+        })
+        console.log(response.data)
+    } catch (error) {
+        console.log(error)
+    }
+}

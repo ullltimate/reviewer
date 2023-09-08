@@ -9,7 +9,8 @@ const Review = new Schema({
     img: {type: String, default: 'https://i.ibb.co/K63xXn0/Photo-Room-png-Photo-Room-1.png'},
     creationDate: {type: String, default: Date.now()},
     score: {type: Number, required: true, default: 0},
-    idAutor: {type: String, required: true, default: ""}
+    idAutor: {type: String, required: true, default: ""},
+    averageRating: {type: Number, required: true, default: 0}
 })
 
 module.exports = model('Review', Review);
