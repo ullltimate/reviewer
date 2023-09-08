@@ -8,6 +8,7 @@ const auth = require('./routes/auth.js');
 const reviews = require('./routes/reviews.js');
 const likes = require('./routes/likes.js');
 const ratings = require('./routes/ratings.js');
+const comments = require('./routes/comments.js')
 const dotenv = require("dotenv")
 dotenv.config();
 
@@ -20,7 +21,8 @@ app.use(express.json());
 app.use('/api/auth', auth);
 app.use('/api/reviews', reviews);
 app.use('/api/likes', likes);
-app.use('/api/ratings', ratings)
+app.use('/api/ratings', ratings);
+app.use('/api/comments', comments);
 
 const start = async () => {
     try {
