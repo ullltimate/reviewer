@@ -51,3 +51,12 @@ export const getLikesByAutor = async (idAutor: string, setAmountLikes: any) => {
         console.log(error)
     }
 }
+
+export const removeLikes = async (idReview: string) => {
+    try {
+        const response = await axios.delete(`${urlAPI}/api/likes/${idReview}`);
+        console.log(response.data)
+    } catch (error) {
+        console.log(error)
+    }
+}
