@@ -57,12 +57,11 @@ export const createReview = async (nameReview: string, title: string, group: str
     }
 }
 
-export const removeReview = async (id: string, setIsDeleted: any) => {
+export const removeReview = async (id: string, setIsDeleted?: any) => {
     try {
         const response = await axios.delete(`${urlAPI}/api/reviews/${id}`);
         console.log(response.data)
-        setIsDeleted(true);
-
+        if (setIsDeleted) setIsDeleted(true);
     } catch (error) {
         console.log(error)
     }

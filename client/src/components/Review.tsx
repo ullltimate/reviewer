@@ -4,11 +4,12 @@ import { Col, Container, Row, Image, Button } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useTheme } from '../hooks/useTheme';
-import { getReview } from '../api/reviews';
+import { getReview, removeReview } from '../api/reviews';
 import { IReview } from '../types/types';
 import ReactStars from 'react-rating-star-with-type';
 import { addRating, getRating } from '../api/rating';
 import { addLikes, deleteLikes, getLikes } from '../api/likes';
+import CreateReview from './CreateReview';
 
 function Review() {
     const params = useParams();
@@ -24,10 +25,13 @@ function Review() {
     const navigate = useNavigate();
     const [userLike, setUserLike] = useState(false);
     const [amountLikes, setAmountLikes] = useState(0);
+    const [showCreate, setShowCreate] = useState<boolean>(false);
+    const [edit, setEdit] = useState(false);
+	const [editReview, setEditReview] = useState('');
 
     useEffect(()=>{
         if (idReview) getReview(idReview, setReview);
-    },[])
+    },[showCreate])
 
     useEffect(()=>{
         (user && idReview) ? getRating(idReview, setRating, JSON.parse(user)._id, setStar, setEditStar,) : (idReview) && getRating(idReview, setRating);
@@ -36,6 +40,8 @@ function Review() {
     useEffect(() => {
         (user && idReview) ? getLikes(idReview, setAmountLikes, JSON.parse(user)._id, setUserLike) : (idReview) && getLikes(idReview, setAmountLikes);
     },[userLike])
+
+    const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
 
     function like(){
         if(user && idReview){
@@ -103,11 +109,26 @@ function Review() {
                                 <Button variant="outline-secondary border-0" onClick={() => like()}>
                                     <small><i className={`bi bi-heart${(userLike)?'-fill':''}`}></i></small>
                                 </Button>
+                                {
+                                user && 
+                                (JSON.parse(user)._id === review.idAutor) 
+                                ? 
+                                    <>
+                                        <Button variant="outline-secondary border-0" onClick={() => handleShowEdit(review._id)}>
+                                            <small><i className="bi bi-pencil-square"></i></small>
+                                        </Button>
+                                        <Button variant="outline-secondary border-0" onClick={() => {removeReview(review._id); navigate(`/user/${JSON.parse(user)._id}`)}}>
+                                            <small><i className="bi bi-trash3"></i></small>
+                                        </Button>
+                                    </>
+                                : ''
+                                }
                             </Col>
                         </Row>
                     </Col>
                 </Row>
                 <p className='text-justify'>{review.description}</p>
+                <CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>
             </Container>
         }
   	  </>
