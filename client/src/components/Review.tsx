@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
-import { Col, Container, Row, Image } from 'react-bootstrap';
+import { Col, Container, Row, Image, Button } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useTheme } from '../hooks/useTheme';
@@ -8,6 +8,7 @@ import { getReview } from '../api/reviews';
 import { IReview } from '../types/types';
 import ReactStars from 'react-rating-star-with-type';
 import { addRating, getRating } from '../api/rating';
+import { addLikes, deleteLikes, getLikes } from '../api/likes';
 
 function Review() {
     const params = useParams();
@@ -21,6 +22,8 @@ function Review() {
     const [editStar, setEditStar] = useState(true);
     const [rating, setRating] = useState(0);
     const navigate = useNavigate();
+    const [userLike, setUserLike] = useState(false);
+    const [amountLikes, setAmountLikes] = useState(0);
 
     useEffect(()=>{
         if (idReview) getReview(idReview, setReview);
@@ -29,7 +32,25 @@ function Review() {
     useEffect(()=>{
         (user && idReview) ? getRating(idReview, setRating, JSON.parse(user)._id, setStar, setEditStar,) : (idReview) && getRating(idReview, setRating);
     },[star])
-    
+
+    useEffect(() => {
+        (user && idReview) ? getLikes(idReview, setAmountLikes, JSON.parse(user)._id, setUserLike) : (idReview) && getLikes(idReview, setAmountLikes);
+    },[userLike])
+
+    function like(){
+        if(user && idReview){
+            if(userLike){
+                deleteLikes(idReview, JSON.parse(user)._id);
+                setUserLike(false);
+            }else{
+                (review) && addLikes(idReview, review.idAutor, JSON.parse(user)._id);
+                setUserLike(true);
+            }
+        } else{
+            navigate('/login');
+        }
+    }
+
     async function rate(nextValue: any){
         if(user && idReview){
             await addRating(idReview, JSON.parse(user)._id, nextValue);
@@ -54,10 +75,7 @@ function Review() {
                     <Col>
                         <Row>
                             <Col>
-                                <h3>{review.title}</h3><p>{t('review.group')} {review.group}</p>
-                                <p>{t('review.score')} {review.score}/10</p>
-                                <p>{t('review.tags')} #{review.tags.map((e:any) => e).join('#')}</p>
-                                <p>{t('review.posted')} {Intl.DateTimeFormat(currentLanguage).format(review.creationDate)}</p>
+                                <h3>{review.title}</h3>
                             </Col>
                             <Col className='text-end'>
                                 <span>{rating}</span>
@@ -71,6 +89,20 @@ function Review() {
                                     style={{justifyContent: 'end'}}
                                     classNames='mt-2'
                                 />
+                            </Col>
+                        </Row>
+                        <p>{t('review.group')} {review.group}</p>
+                        <p>{t('review.score')} {review.score}/10</p>
+                        <p>{t('review.tags')} #{review.tags.map((e:any) => e).join('#')}</p>
+                        <Row className='align-items-center'>
+                            <Col>
+                                <p className='mb-0'>{t('review.posted')} {Intl.DateTimeFormat(currentLanguage).format(review.creationDate)}</p>
+                            </Col>
+                            <Col className='text-end'>
+                                <small><span className='text-secondary'>{amountLikes}</span></small>
+                                <Button variant="outline-secondary border-0" onClick={() => like()}>
+                                    <small><i className={`bi bi-heart${(userLike)?'-fill':''}`}></i></small>
+                                </Button>
                             </Col>
                         </Row>
                     </Col>
