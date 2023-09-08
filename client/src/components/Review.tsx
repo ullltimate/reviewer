@@ -10,6 +10,9 @@ import ReactStars from 'react-rating-star-with-type';
 import { addRating, getRating } from '../api/rating';
 import { addLikes, deleteLikes, getLikes } from '../api/likes';
 import CreateReview from './CreateReview';
+import { addComment, getComments } from '../api/comments';
+import { checkInputs, resetInputs } from '../healpers/healper';
+import CardComment from './CardComment';
 
 function Review() {
     const params = useParams();
@@ -28,10 +31,17 @@ function Review() {
     const [showCreate, setShowCreate] = useState<boolean>(false);
     const [edit, setEdit] = useState(false);
 	const [editReview, setEditReview] = useState('');
+    const [newComment, setNewComment] = useState('');
+    const [warning, setWarning] = useState(false);
+    const [comments, setComments] = useState<any[]>();
 
     useEffect(()=>{
         if (idReview) getReview(idReview, setReview);
     },[showCreate])
+
+    useEffect(() => {
+        idReview && setInterval(() => getComments(idReview, setComments), 2000);
+    },[])
 
     useEffect(()=>{
         (user && idReview) ? getRating(idReview, setRating, JSON.parse(user)._id, setStar, setEditStar,) : (idReview) && getRating(idReview, setRating);
@@ -62,6 +72,20 @@ function Review() {
             await addRating(idReview, JSON.parse(user)._id, nextValue);
             setStar(nextValue);
             setEditStar(false);
+        } else {
+            navigate('/login');
+        }
+    }
+
+    async function sendComment() {
+        if(user && idReview){
+            if (checkInputs([newComment])){
+                await addComment(idReview, JSON.parse(user)._id, JSON.parse(user).name, newComment);
+                resetInputs([setNewComment]);
+                setWarning(false)
+            } else {
+                setWarning(true)
+            }
         } else {
             navigate('/login');
         }
@@ -129,13 +153,23 @@ function Review() {
                 </Row>
                 <p className='text-justify'>{review.description}</p>
                 <CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>
+                <h4>Comments {comments ? comments.length : 0}</h4>
+                {
+                comments 
+                && 
+                comments.map((el:any)=><CardComment key={el._id} nameUser={el.nameUser} comment={el.comment}/>)
+                }
+                {warning ? <p>Please enter your comment</p> : ''}
                 <InputGroup className="mb-3">
                     <Form.Control
                       placeholder="Enter your comment"
                       aria-label="Recipient's username"
                       aria-describedby="basic-addon2"
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      required
                     />
-                    <Button variant="outline-secondary" id="button-addon2">
+                    <Button variant="outline-secondary" id="button-addon2" onClick={sendComment}>
                         <i className="bi bi-send-fill"></i>
                          Send
                     </Button>
