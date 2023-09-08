@@ -1,6 +1,6 @@
 const Router = require("express");
 const router = new Router();
-const Comment = require('../models/rating');
+const Comment = require('../models/comment');
 
 router.post('/', async (req, res) => {
     try {
@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
             await Comment.updateOne({idReview}, {$addToSet: {comments: {idUser, nameUser, comment}}})
             return res.json("Add new comment")
         } else {
-            const newReview = new Rating({idReview, comments: {idUser, nameUser, comment}})
+            const newReview = new Comment({idReview, comments: {idUser, nameUser, comment}})
             newReview.save();
             return res.json(newReview)
         }
