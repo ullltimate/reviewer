@@ -1,14 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Header from './components/Header';
-import { Container, Pagination, Tab, Tabs } from 'react-bootstrap';
+import { Accordion, Button, Col, Container, Pagination, Row, Tab, Tabs } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import CardReview from './components/CardReview';
 import { useTranslation } from "react-i18next";
 import { useTheme } from './hooks/useTheme';
-import { getAllReviews } from './api/reviews';
+import { filteredByTags, getAllTags } from './api/reviews';
 import { IReview } from './types/types';
 import CreateReview from './components/CreateReview';
+import Tags from './components/Tags';
+import Select from './components/Select';
 
 function App() {
 	const [key, setKey] = useState('recent');
@@ -23,6 +25,9 @@ function App() {
 	const [isDeleted, setIsDeleted] = useState(false);
 	const [activePage, setActivePage] = useState(1);
 	const [amountAllReviews, setAmountAllReviews] = useState(0);
+	const [allTags, setAllTags] = useState<any[]>([]);
+	const [onTags, setOnTags] = useState<any[]>([]);
+	const [tag, setTag] = useState('');
 	const limit = 5;
 	let items = [];
 	for (let number = 1; number <= Math.ceil(amountAllReviews/limit); number++) {
@@ -42,13 +47,39 @@ function App() {
 	const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
 
 	useEffect(() => {
-		getAllReviews(setAllReviews, key, setAmountAllReviews);
-	},[isDeleted, key])
+		getAllTags(setAllTags, setOnTags);
+	},[])
+
+	useEffect(() => {
+		if(tag != '') setOnTags(Array.from(new Set(onTags.concat(tag))))
+	}, [tag]);
+
+	useEffect(() => {
+		filteredByTags(onTags, key, setAllReviews, setAmountAllReviews)
+	},[isDeleted, key, onTags])
 
   	return (
   	  <>
 		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
 		<Container>
+			<Accordion>
+      			<Accordion.Item eventKey="0" className='border-0 mt-5'>
+      			  	<Accordion.Header className='border' style={{maxWidth: '200px', marginRight: 0, marginLeft: 'auto'}}>Tags cloud</Accordion.Header>
+      			  	<Accordion.Body>
+						<Row>
+							<Col md={2}>
+								<Select name={'Tags:'} options={allTags} value={tag} setValue={setTag}/>
+							</Col>
+							<Col md={2}>
+								<Button variant="outline-success" className='w-100 mb-3' onClick={() => setOnTags(allTags)}>
+									Reset
+								</Button>
+							</Col>
+						</Row>
+						<Tags tags={onTags} setOnTags={setOnTags}/>
+      			  	</Accordion.Body>
+      			</Accordion.Item>
+    		</Accordion>
 			<Tabs
     		  id="controlled-tab-example"
     		  activeKey={key}

@@ -2,25 +2,43 @@ import axios from "axios"
 import { urlAPI } from "../healpers/healper";
 import { removeLikes } from "./likes";
 
-export const getAllReviews = async (setAllReviews: any, key: string, setAmountAllReviews: any) => {
-	try {
-        const  response  = await axios.get(`${urlAPI}/api/reviews`);
-        if (key === 'recent'){
-            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.creationDate - a.creationDate)]);
-        } else {
-            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.averageRating - a.averageRating)]);
-        }
-        setAmountAllReviews(response.data.length)
-    } catch (error) {
-        console.log(error)
-    }
-}
+//export const getAllReviews = async (setAllReviews: any, key: string, setAmountAllReviews: any) => {
+//	try {
+//        const  response  = await axios.get(`${urlAPI}/api/reviews`);
+//        if (key === 'recent'){
+//            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.creationDate - a.creationDate)]);
+//        } else {
+//            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.averageRating - a.averageRating)]);
+//        }
+//        setAmountAllReviews(response.data.length)
+//    } catch (error) {
+//        console.log(error)
+//    }
+//}
 
 export const getAllTags = async (setAllTags: any, setOnTags: any) => {
 	try {
         const  response  = await axios.get(`${urlAPI}/api/reviews`)
         setAllTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
         setOnTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const filteredByTags = async (tags: any[], key: string, setAllReviews:any, setAmountAllReviews: any) => {
+    try {
+        const response = await axios.post(`${urlAPI}/api/reviews/filterTags`, {
+            tags
+        })
+        if (key === 'recent'){
+            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.creationDate - a.creationDate)]);
+        } else {
+            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.averageRating - a.averageRating)]);
+        }
+        setAllReviews(response.data);
+        setAmountAllReviews(response.data.length);
+        //console.log(response.data)
     } catch (error) {
         console.log(error)
     }

@@ -57,6 +57,17 @@ router.post('/filters', async(req, res) => {
     }
 })
 
+router.post('/filterTags', async(req, res) => {
+    try {
+        const {tags} = req.body;
+        const filersReviews = await Review.find({tags: {$in: tags}});
+        return res.json(filersReviews)
+    } catch(e){
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
 router.get('/', async (req, res) => {
     try {
         const reviews = await Review.find();
