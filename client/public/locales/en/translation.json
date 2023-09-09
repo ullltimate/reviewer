@@ -1,0 +1,59 @@
+{
+    "header": {
+        "login": "Login",
+        "search": "Search",
+        "logout": "Log out",
+        "signed": "Signed in as:"
+    },
+    "app": {
+        "tabLatest": "Latest reviews",
+        "tabRating": "High rating",
+        "tags": "Tags:",
+        "reset": "Reset",
+        "tagsCloud": "Tags cloud"
+    },
+    "cardReview": {
+        "score": "Author's assessment:",
+        "viewMore": "view more",
+        "posted": "Posted:"
+    },
+    "review": {
+        "score": "Author's assessment:",
+        "group": "Group:",
+        "posted": "Posted:",
+        "tags": "Tags:",
+        "comments": "Comments",
+        "commentInput": "Enter your comment",
+        "commentWarning": "Please enter your comment",
+        "commentBtn": "Send"
+    },
+    "loginPage": {
+        "title": "Log in with another providers",
+        "btnGithub": " Login with GitHub",
+        "btnGoogle": " Login with Google"
+    },
+    "userPage": {
+        "btnCreate": "Create review",
+        "btnReset": "Reset filters",
+        "sort": "Sort by:",
+        "groups": "Group",
+        "tags": "Tags:",
+        "reviewNotFound": "Reviews not found"
+    },
+    "createReview":{
+        "createTitle": "Create new review",
+        "editTitle": "Edit your review",
+        "reviewTitle": "Review title",
+        "reviewTitlePlaceholder": "Enter review title",
+        "workTitle": "Title of the work",
+        "workTitlePlaceholder": "Enter title of the work",
+        "score":"Enter author's assessment:",
+        "tags": "Tags:",
+        "tagsPlaceholder": "Enter your tags with #",
+        "description": "Description",
+        "btnClose": "Close",
+        "btnSave": "Save Changes",
+        "checkInputs": "Please fill in all field!",
+        "checkInputsOptional": "Tags field is optional."
+    }
+}
