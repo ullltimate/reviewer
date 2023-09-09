@@ -12,7 +12,6 @@ function Login() {
 	const [currentLanguage, setCurrentLanguage] = useState(language);
 	const {theme, setTheme} = useTheme();
 	const navigate = useNavigate();
-	//const loginWith = useRef(localStorage.getItem("loginWith"))
 
 	const GITHUB_CLIENT_ID: string = import.meta.env.VITE_GITHUB_CLIENT_ID;
 

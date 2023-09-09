@@ -20,13 +20,6 @@ function CreateReview(props: any){
 	const [warning, setWarning] = useState(false);
 	const [review, setReview] = useState<IReview | null>(null)
 	const idReview = props.update;
-	//console.log(props.update)
-	//console.log(review)
-	//console.log(Number(score))
-	//console.log(params.idUser)
-	//console.log(tags.split('#').slice(1))
-	//console.log(description)
-	//console.log(title)
 
 	useEffect(() => {
 		(props.update != '') ? getReview(props.update, setReview) : setReview(null);

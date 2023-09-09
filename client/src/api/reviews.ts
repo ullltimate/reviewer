@@ -2,20 +2,6 @@ import axios from "axios"
 import { urlAPI } from "../healpers/healper";
 import { removeLikes } from "./likes";
 
-//export const getAllReviews = async (setAllReviews: any, key: string, setAmountAllReviews: any) => {
-//	try {
-//        const  response  = await axios.get(`${urlAPI}/api/reviews`);
-//        if (key === 'recent'){
-//            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.creationDate - a.creationDate)]);
-//        } else {
-//            setAllReviews(() => [...response.data.sort((a: any, b: any) => b.averageRating - a.averageRating)]);
-//        }
-//        setAmountAllReviews(response.data.length)
-//    } catch (error) {
-//        console.log(error)
-//    }
-//}
-
 export const getAllTags = async (setAllTags: any, setOnTags: any) => {
 	try {
         const  response  = await axios.get(`${urlAPI}/api/reviews`)
@@ -38,7 +24,6 @@ export const filteredByTags = async (tags: any[], key: string, setAllReviews:any
         }
         setAllReviews(response.data);
         setAmountAllReviews(response.data.length);
-        //console.log(response.data)
     } catch (error) {
         console.log(error)
     }
@@ -116,7 +101,6 @@ export const filteredReviews = async (idAutor: string, group: string, tags: any[
             tags
         })
         setReviewsByAutor(response.data)
-        //console.log(response.data)
     } catch (error) {
         console.log(error)
     }
@@ -127,7 +111,6 @@ export const updateRatingReview = async (id: string, averageRating: number) => {
         const response = await axios.put(`${urlAPI}/api/reviews/rating/${id}`, {
             averageRating
         })
-        //console.log(response.data)
     } catch (error) {
         console.log(error)
     }

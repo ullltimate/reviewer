@@ -15,10 +15,8 @@ router.get('/github/accessToken', async (req, res) => {
                 Accept: "application/json",
             },
         })
-        const data = await response.json()
-        //console.log(data);
+        const data = await response.json();
         const token = data.access_token;
-        //console.log(token)
         if(token){
             const responseUser = await fetch(`http://localhost:7000/api/auth/github/userData?accessToken=${token}`, {
                 method: "GET",
@@ -27,7 +25,6 @@ router.get('/github/accessToken', async (req, res) => {
                 },
             })
             const dataUser = await responseUser.json();
-            //console.log(dataUser)
             const responseUserAPP = await fetch(`http://localhost:7000/api/auth/registration`, {
                 method: "POST",
                 headers: {
@@ -41,15 +38,13 @@ router.get('/github/accessToken', async (req, res) => {
                     img: dataUser.avatar_url,
                 }),
             })
-            const dataUserApp = await responseUserAPP.json()
-            //console.log(dataUserApp)
+            const dataUserApp = await responseUserAPP.json();
             res.redirect(
                 `http://localhost:5173/user/${dataUserApp}`
               );
         } else {
             return res.status(400).json({message: `bad token GitHub`})
         }
-        //return res.json(data);
     } catch (e) {
         console.log(e);
         res.send({message: 'Server error'});
@@ -76,7 +71,6 @@ router.get('/github/userData', async (req, res) => {
 router.get('/google/userData', async (req, res) => {
     try {
         const accessToken = req.query.accessToken;
-        //console.log(accessToken)
         const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',
           {
             method: "GET",
@@ -85,8 +79,7 @@ router.get('/google/userData', async (req, res) => {
             },
           },
         );
-        const data = await response.json()
-        //console.log(data)
+        const data = await response.json();
         const responseUserAPP = await fetch(`http://localhost:7000/api/auth/registration`, {
                 method: "POST",
                 headers: {
@@ -100,7 +93,7 @@ router.get('/google/userData', async (req, res) => {
                     img: data.picture,
                 }),
         })
-        const dataUserApp = await responseUserAPP.json()
+        const dataUserApp = await responseUserAPP.json();
         return res.json(dataUserApp)
       } catch (e) {
         console.log(e);

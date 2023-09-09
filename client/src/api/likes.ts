@@ -12,7 +12,6 @@ export const getLikes = async (idReview: string, setAmountLikes: any, userId?:st
                 setUserLike(response.data.likes.includes(userId))
             }
         }
-        //console.log(response.data.likes)
     } catch (error) {
         console.log(error)
     }
