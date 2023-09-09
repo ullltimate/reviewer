@@ -111,6 +111,7 @@ export const updateRatingReview = async (id: string, averageRating: number) => {
         const response = await axios.put(`${urlAPI}/api/reviews/rating/${id}`, {
             averageRating
         })
+        response.data
     } catch (error) {
         console.log(error)
     }
