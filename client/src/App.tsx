@@ -64,15 +64,15 @@ function App() {
 		<Container>
 			<Accordion>
       			<Accordion.Item eventKey="0" className='border-0 mt-5'>
-      			  	<Accordion.Header className='border' style={{maxWidth: '200px', marginRight: 0, marginLeft: 'auto'}}>Tags cloud</Accordion.Header>
-      			  	<Accordion.Body>
+      			  	<Accordion.Header className='border' style={{maxWidth: '200px', marginRight: 0, marginLeft: 'auto'}}>{t('app.tagsCloud')}</Accordion.Header>
+      			  	<Accordion.Body className='p-0 mb-3'>
 						<Row>
 							<Col md={2}>
-								<Select name={'Tags:'} options={allTags} value={tag} setValue={setTag}/>
+								<Select name={t('app.tags')} options={allTags} value={tag} setValue={setTag}/>
 							</Col>
 							<Col md={2}>
 								<Button variant="outline-success" className='w-100 mb-3' onClick={() => setOnTags(allTags)}>
-									Reset
+									{t('app.reset')}
 								</Button>
 							</Col>
 						</Row>
