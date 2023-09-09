@@ -40,7 +40,7 @@ router.get('/github/accessToken', async (req, res) => {
             })
             const dataUserApp = await responseUserAPP.json();
             res.redirect(
-                `http://localhost:5173/user/${dataUserApp}`
+                `https://main--fanciful-klepon-4f42e9.netlify.app/user/${dataUserApp}`
               );
         } else {
             return res.status(400).json({message: `bad token GitHub`})
