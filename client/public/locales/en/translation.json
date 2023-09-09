@@ -18,7 +18,11 @@
         "score": "Author's assessment:",
         "group": "Group:",
         "posted": "Posted:",
-        "tags": "Tags:"
+        "tags": "Tags:",
+        "comments": "Comments",
+        "commentInput": "Enter your comment",
+        "commentWarning": "Please enter your comment",
+        "commentBtn": "Send"
     },
     "loginPage": {
         "title": "Log in with another providers",

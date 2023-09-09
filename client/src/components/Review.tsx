@@ -154,16 +154,16 @@ function Review() {
                 </Row>
                 <ReactMarkdown children={review.description}></ReactMarkdown>
                 <CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>
-                <h4>Comments {comments ? comments.length : 0}</h4>
+                <h4>{t('review.comments')} {comments ? comments.length : 0}</h4>
                 {
                 comments 
                 && 
                 comments.map((el:any)=><CardComment key={el._id} nameUser={el.nameUser} comment={el.comment}/>)
                 }
-                {warning ? <p>Please enter your comment</p> : ''}
+                {warning ? <p className='text-danger'>{t('review.commentWarning')}</p> : ''}
                 <InputGroup className="mb-3">
                     <Form.Control
-                      placeholder="Enter your comment"
+                      placeholder={t('review.commentInput')}
                       aria-label="Recipient's username"
                       aria-describedby="basic-addon2"
                       value={newComment}
@@ -172,7 +172,7 @@ function Review() {
                     />
                     <Button variant="outline-secondary" id="button-addon2" onClick={sendComment}>
                         <i className="bi bi-send-fill"></i>
-                         Send
+                        {t('review.commentBtn')}
                     </Button>
                 </InputGroup>
             </Container>
