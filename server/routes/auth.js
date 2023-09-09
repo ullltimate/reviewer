@@ -3,6 +3,7 @@ const router = new Router();
 const User = require('../models/user')
 const jwt = require('jsonwebtoken');
 const dotenv = require("dotenv")
+const fetch = require("node-fetch");
 dotenv.config();
 
 router.get('/github/accessToken', async (req, res) => {
