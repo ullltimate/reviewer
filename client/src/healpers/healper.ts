@@ -1,4 +1,4 @@
-export const urlAPI: string = 'http://localhost:7000';
+export const urlAPI: string = 'https://reviewer-server-dkmy.onrender.com';
 
 export function changeColor(): string{
     const colors: string[] = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'];

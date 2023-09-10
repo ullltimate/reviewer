@@ -1,4 +1,5 @@
 const Router = require("express");
+const fetch = require("node-fetch");
 const router = new Router();
 const Review = require('../models/review');
 
@@ -7,7 +8,7 @@ router.post('/newReview', async (req, res) => {
         const {nameReview, title, group, tags, description, img, creationDate, score, idAutor} = req.body;
         const review = new Review({nameReview, title, group, tags, description, img, creationDate, score, idAutor});
         await review.save();
-        await fetch(`http://localhost:7000/api/likes`, {
+        await fetch(`https://reviewer-server-dkmy.onrender.com/api/likes`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

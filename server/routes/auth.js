@@ -3,6 +3,7 @@ const router = new Router();
 const User = require('../models/user')
 const jwt = require('jsonwebtoken');
 const dotenv = require("dotenv")
+const fetch = require("node-fetch");
 dotenv.config();
 
 router.get('/github/accessToken', async (req, res) => {
@@ -18,14 +19,14 @@ router.get('/github/accessToken', async (req, res) => {
         const data = await response.json();
         const token = data.access_token;
         if(token){
-            const responseUser = await fetch(`http://localhost:7000/api/auth/github/userData?accessToken=${token}`, {
+            const responseUser = await fetch(`https://reviewer-server-dkmy.onrender.com/api/auth/github/userData?accessToken=${token}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             })
             const dataUser = await responseUser.json();
-            const responseUserAPP = await fetch(`http://localhost:7000/api/auth/registration`, {
+            const responseUserAPP = await fetch(`https://reviewer-server-dkmy.onrender.com/api/auth/registration`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -40,7 +41,7 @@ router.get('/github/accessToken', async (req, res) => {
             })
             const dataUserApp = await responseUserAPP.json();
             res.redirect(
-                `http://localhost:5173/user/${dataUserApp}`
+                `https://fanciful-klepon-4f42e9.netlify.app/user/${dataUserApp}`
               );
         } else {
             return res.status(400).json({message: `bad token GitHub`})
@@ -80,7 +81,7 @@ router.get('/google/userData', async (req, res) => {
           },
         );
         const data = await response.json();
-        const responseUserAPP = await fetch(`http://localhost:7000/api/auth/registration`, {
+        const responseUserAPP = await fetch(`https://reviewer-server-dkmy.onrender.com/api/auth/registration`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
