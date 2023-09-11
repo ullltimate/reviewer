@@ -12,6 +12,7 @@ import Tags from './Tags';
 import { filteredReviews, getAllTags, getReviewsByAutor } from '../api/reviews';
 import { IReview, IUser } from '../types/types';
 import { getLikesByAutor } from '../api/likes';
+import Loader from './Loader';
 
 function User() {
 	const { t, i18n: {changeLanguage, language} } = useTranslation();
@@ -69,13 +70,14 @@ function User() {
 			/>
   	  	    <Container>
 				{
-					user &&
+					user 
+					? 
 					<>
 						<Row>
 							<Col md={3} className='text-center'>
 								<Image src={user.img} className='mt-3' style={{ maxWidth: '8rem' }} roundedCircle />
 								<h5 className='mb-1'>{user.name}</h5>
-								<Badge bg="danger" className='mb-1'><i className="bi bi-suit-heart"></i>{amoutLikes}</Badge>
+								<Badge bg="danger" className='mb-1'><i className="bi bi-suit-heart-fill"></i> {amoutLikes}</Badge>
 								<p className='mb-3'>{user.email}</p>
 								<Button variant="outline-success" className='w-100 mb-3' onClick={() => handleShow()}>
       								{t('userPage.btnCreate')}
@@ -98,6 +100,8 @@ function User() {
 							</Col>
 						</Row>
 					</>
+					: 
+					<Loader />
 				}
   	  	    </Container>
   	  	</>
