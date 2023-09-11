@@ -1,6 +1,7 @@
 import axios from "axios"
 import { urlAPI } from "../healpers/healper";
 import { removeLikes } from "./likes";
+import { removeComments } from "./comments";
 
 export const getAllTags = async (setAllTags: any, setOnTags: any) => {
 	try {
@@ -71,6 +72,7 @@ export const removeReview = async (id: string, setIsDeleted?: any) => {
         const response = await axios.delete(`${urlAPI}/api/reviews/${id}`);
         console.log(response.data)
         await removeLikes(id);
+        await removeComments(id);
         if (setIsDeleted) setIsDeleted(true);
     } catch (error) {
         console.log(error)
@@ -112,6 +114,20 @@ export const updateRatingReview = async (id: string, averageRating: number) => {
             averageRating
         })
         response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getSearchReview = async (searchString: string, setSearchResults: any) => {
+    try {
+        const  response  = await axios.post(`${urlAPI}/api/reviews/search`, {
+            searchString,
+        })
+        const responseComments = await axios.post(`${urlAPI}/api/comments/search`, {
+            searchString,
+        })
+        setSearchResults(Array.from(new Set(response.data.concat(responseComments.data).map((el:any) => JSON.stringify(el)))).map((el: any) => JSON.parse(el)))
     } catch (error) {
         console.log(error)
     }

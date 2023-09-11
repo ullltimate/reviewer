@@ -11,14 +11,15 @@ import { IReview } from './types/types';
 import CreateReview from './components/CreateReview';
 import Tags from './components/Tags';
 import Select from './components/Select';
+import Loader from './components/Loader';
 
 function App() {
 	const [key, setKey] = useState('recent');
 	const { t, i18n: {changeLanguage, language} } = useTranslation();
 	const [currentLanguage, setCurrentLanguage] = useState(language);
 	const {theme, setTheme} = useTheme();
-	const [allReviews, setAllReviews] = useState<IReview[]>([]);
-	const [pageReview, setPageReview] = useState<IReview[]>([]);
+	const [allReviews, setAllReviews] = useState<IReview[] | null>(null);
+	const [pageReview, setPageReview] = useState<IReview[] | null>(null);
 	const [showCreate, setShowCreate] = useState<boolean>(false);
 	const [edit, setEdit] = useState(false);
 	const [editReview, setEditReview] = useState('');
@@ -39,9 +40,11 @@ function App() {
 	}
 
 	useEffect(() => {
+		if(allReviews){
 		const startIndex = (activePage-1)*limit;
 		const endIndex = startIndex + limit
 		setPageReview(allReviews.slice(startIndex, endIndex));
+		}
 	},[activePage, allReviews])
 
 	const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
@@ -87,12 +90,24 @@ function App() {
     		  className="mb-3"
     		>
     		  	<Tab eventKey="recent" title={t('app.tabLatest')}>
-				  {pageReview.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)}
-				  <Pagination className='justify-content-center'>{items}</Pagination>
+				  	{
+						pageReview
+						?
+						pageReview.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
+						:
+						<Loader />
+					}
+				  	<Pagination className='justify-content-center'>{items}</Pagination>
 				</Tab>
     		  	<Tab eventKey="rating" title={t('app.tabRating')}>
-				  {pageReview.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}  handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)}
-				  <Pagination className='justify-content-center'>{items}</Pagination>
+				  	{
+						pageReview 
+						?
+						pageReview.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}  handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
+						:
+						<Loader />
+					}
+				  	<Pagination className='justify-content-center'>{items}</Pagination>
 				</Tab>
     		</Tabs>
 			<CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>

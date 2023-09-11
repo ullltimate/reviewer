@@ -9,6 +9,7 @@ function Header(props: any) {
     const user: string | null = localStorage.getItem('user');
 	const navigate = useNavigate();
     const [userObject, setUserObject] = useState<IUser>();
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
         if (user) setUserObject(JSON.parse(user))
@@ -34,6 +35,10 @@ function Header(props: any) {
 		localStorage.removeItem("loginWith");
 		navigate("/login")
 	}
+
+    const search = () => {
+        navigate(`/search?searchTerm=${searchValue}`);
+    }
 
     return (
         <>
@@ -91,8 +96,12 @@ function Header(props: any) {
                       placeholder={props.t('header.search')}
                       className="me-2"
                       aria-label="Search"
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <Button variant="outline-success">{props.t('header.search')}</Button>
+                    <Button variant="outline-success" onClick={search}>
+                        {props.t('header.search')}
+                    </Button>
                 </Form>
             </Container>
         </Navbar>

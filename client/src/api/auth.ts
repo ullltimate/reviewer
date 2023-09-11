@@ -14,14 +14,15 @@ export const getUser = async (_id: string, setUser: any) => {
     }
 }
 
-export const getUserGoogle = async (accessToken: string, navigate: any) => {
+export const getUserGoogle = async (accessToken: string, navigate: any, setLoading: any) => {
     try {
+        setLoading(true);
         const response = await axios.get(`${urlAPI}/api/auth/google/userData?accessToken=${accessToken}`, {
 		    headers: {
 		    	"Content-Type": "application/json",
 		    },
 	    })
-        console.log(response)
+        setLoading(false);
         navigate(`/user/${response.data}`)
     } catch(error){
         console.log(error)

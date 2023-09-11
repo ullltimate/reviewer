@@ -12,5 +12,6 @@ const Review = new Schema({
     idAutor: {type: String, required: true, default: ""},
     averageRating: {type: Number, required: true, default: 0}
 })
+Review.index({nameReview: 'text', title: 'text', group: 'text', description: 'text'});
 
 module.exports = model('Review', Review);

@@ -13,7 +13,7 @@ function CreateReview(props: any){
 	const [nameReview, setNameReview] = useState('');
 	const [title, setTitle] = useState('');
 	const [group, setGroup] = useState('');
-	const [score, setScore] = useState('');
+	const [score, setScore] = useState(0);
 	const [tags, setTags] = useState('');
 	const [description, setDescription] = useState('');
 	const params = useParams();
@@ -30,18 +30,20 @@ function CreateReview(props: any){
 			setNameReview(review.nameReview);
 			setTitle(review.title);
 			setGroup(review.group);
-			setScore(String(review.score));
+			setScore(review.score);
 			setTags(`#${review.tags.join('#')}`);
 			setDescription(review.description);
 		} else {
-			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setScore]);
+			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription]);
+			setScore(0);
 		}
 	},[review])
 
 	async function save(){
-		if(checkInputs([nameReview, title, group, description, score])){
+		if(checkInputs([nameReview, title, group, description])){
 			if (params.idUser) await createReview(nameReview, title, group, Number(score), tags.split('#').slice(1), description, params.idUser);
-			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setScore]);
+			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription]);
+			setScore(0);
 			setWarning(false);
 		} else {
 			setWarning(true);
@@ -49,7 +51,7 @@ function CreateReview(props: any){
 	}
 
 	async function update() {
-		if(checkInputs([nameReview, title, group, description, score])){
+		if(checkInputs([nameReview, title, group, description])){
 			await updateReview(props.update, nameReview, title, group, Number(score), tags.split('#').slice(1), description);
 			setWarning(false);
 		} else {
@@ -101,7 +103,7 @@ function CreateReview(props: any){
                                     max={10}
                                     step={1}
 									value={score}
-									onChange={(e) => Number(e.target.value)>10 ? setScore('10') : setScore(e.target.value)}
+									onChange={(e) => Number(e.target.value)>10 ? setScore(10) : setScore(Number(e.target.value))}
 									required
 									placeholder={t('createReview.score')}
       					        />

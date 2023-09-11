@@ -6,12 +6,14 @@ import { useTheme } from '../hooks/useTheme';
 import { useGoogleLogin } from "@react-oauth/google"
 import { useNavigate } from 'react-router-dom';
 import { getUserGoogle } from '../api/auth';
+import Loader from './Loader';
 
 function Login() {
 	const { t, i18n: {changeLanguage, language} } = useTranslation();
 	const [currentLanguage, setCurrentLanguage] = useState(language);
 	const {theme, setTheme} = useTheme();
 	const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
 
 	const GITHUB_CLIENT_ID: string = import.meta.env.VITE_GITHUB_CLIENT_ID;
 
@@ -23,32 +25,38 @@ function Login() {
 	const loginToGoogle = useGoogleLogin({
 		onSuccess: tokenResponse => {
 		 localStorage.setItem("loginWith", "Google")
-		 getUserGoogle(tokenResponse.access_token, navigate)
+		 getUserGoogle(tokenResponse.access_token, navigate, setLoading)
 		},
 	})
 
   	return (
   	  	<>
-  	  		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
-  	  	    <Container>
-				<Row style={{ height: '70vh' }} className='align-items-center'>
-					<Col>
-						<Card style={{ width: '22rem' }} className='mx-auto text-center'>
-    			  			<Card.Body>
-							  	<Card.Title className='mb-3'>{t('loginPage.title')}</Card.Title>
-								<div className="d-grid gap-2">
-      								<Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => loginToGithub()}>
-									  <i className="bi bi-github"></i> {t('loginPage.btnGithub')}
-									</Button>
-									<Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => loginToGoogle()}>
-										<i className="bi bi-google"></i>{t('loginPage.btnGoogle')}
-									</Button>
-								</div>
-							</Card.Body>
-    					</Card>
-					</Col>
-				</Row>
-  	  	    </Container>
+		  	<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
+			{
+				loading 
+				?
+				<Loader />
+				:
+				<Container>
+					<Row style={{ height: '70vh' }} className='align-items-center'>
+						<Col>
+							<Card style={{ width: '22rem' }} className='mx-auto text-center'>
+    				  			<Card.Body>
+								  	<Card.Title className='mb-3'>{t('loginPage.title')}</Card.Title>
+									<div className="d-grid gap-2">
+      									<Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => loginToGithub()}>
+										  <i className="bi bi-github"></i> {t('loginPage.btnGithub')}
+										</Button>
+										<Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => loginToGoogle()}>
+											<i className="bi bi-google"></i>{t('loginPage.btnGoogle')}
+										</Button>
+									</div>
+								</Card.Body>
+    						</Card>
+						</Col>
+					</Row>
+  	  	    	</Container>
+			}
   	  	</>
   	)
 }

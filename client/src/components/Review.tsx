@@ -14,6 +14,7 @@ import { addComment, getComments } from '../api/comments';
 import { checkInputs, resetInputs } from '../healpers/healper';
 import CardComment from './CardComment';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import Loader from './Loader';
 
 function Review() {
     const params = useParams();
@@ -96,7 +97,8 @@ function Review() {
   	  <>
 		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
         {
-            review  && 
+            review  
+            ?
             <Container>
                 <h2 className='my-5 text-center'>{review.nameReview}</h2>
                 <Row className='mb-3'>
@@ -109,8 +111,19 @@ function Review() {
                                 <h3>{review.title}</h3>
                             </Col>
                             <Col className='text-end'>
-                                <span>{rating}</span>
+                                <span>{rating.toFixed(1)}</span>
                                 <i className="bi bi-star-fill text-warning"></i>
+                                <br />
+                                <small><span className='text-secondary'>{t('cardReview.like')} {amountLikes}</span></small>
+                            </Col>
+                        </Row>
+                        <p>{t('review.group')} {review.group}</p>
+                        <p>{t('review.score')} {review.score}/10</p>
+                        <Row>
+                            <Col>
+                                <p className='mb-0'>{t('review.tags')} #{review.tags.map((e:any) => e).join('#')}</p>
+                            </Col>
+                            <Col className='text-end'>
                                 <ReactStars 
                                     key={`stars_${star}`}
                                     onChange={rate} 
@@ -118,19 +131,14 @@ function Review() {
                                     isEdit={editStar}  
                                     activeColors={["#ffc107"]} 
                                     style={{justifyContent: 'end'}}
-                                    classNames='mt-2'
                                 />
                             </Col>
                         </Row>
-                        <p>{t('review.group')} {review.group}</p>
-                        <p>{t('review.score')} {review.score}/10</p>
-                        <p>{t('review.tags')} #{review.tags.map((e:any) => e).join('#')}</p>
                         <Row className='align-items-center'>
                             <Col>
                                 <p className='mb-0'>{t('review.posted')} {Intl.DateTimeFormat(currentLanguage).format(review.creationDate)}</p>
                             </Col>
                             <Col className='text-end'>
-                                <small><span className='text-secondary'>{amountLikes}</span></small>
                                 <Button variant="outline-secondary border-0" onClick={() => like()}>
                                     <small><i className={`bi bi-heart${(userLike)?'-fill':''}`}></i></small>
                                 </Button>
@@ -157,8 +165,10 @@ function Review() {
                 <h4>{t('review.comments')} {comments ? comments.length : 0}</h4>
                 {
                 comments 
-                && 
+                ?
                 comments.map((el:any)=><CardComment key={el._id} nameUser={el.nameUser} comment={el.comment}/>)
+                :
+                <Loader />
                 }
                 {warning ? <p className='text-danger'>{t('review.commentWarning')}</p> : ''}
                 <InputGroup className="mb-3">
@@ -176,6 +186,8 @@ function Review() {
                     </Button>
                 </InputGroup>
             </Container>
+            :
+            <Loader />
         }
   	  </>
   	)
