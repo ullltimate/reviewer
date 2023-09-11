@@ -118,3 +118,17 @@ export const updateRatingReview = async (id: string, averageRating: number) => {
         console.log(error)
     }
 }
+
+export const getSearchReview = async (searchString: string, setSearchResults: any) => {
+    try {
+        const  response  = await axios.post(`${urlAPI}/api/reviews/search`, {
+            searchString,
+        })
+        const responseComments = await axios.post(`${urlAPI}/api/comments/search`, {
+            searchString,
+        })
+        setSearchResults(Array.from(new Set(response.data.concat(responseComments.data).map((el:any) => JSON.stringify(el)))).map((el: any) => JSON.parse(el)))
+    } catch (error) {
+        console.log(error)
+    }
+}

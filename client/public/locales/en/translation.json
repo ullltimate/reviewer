@@ -56,5 +56,10 @@
         "btnSave": "Save Changes",
         "checkInputs": "Please fill in all field!",
         "checkInputsOptional": "Tags field is optional."
+    },
+    "search":{
+        "result": "Results:",
+        "notFound": "No results were found for your request",
+        "waitQuery": "please enter your query in the search field!"
     }
 }

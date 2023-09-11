@@ -1,6 +1,7 @@
 const Router = require("express");
 const router = new Router();
 const Comment = require('../models/comment');
+const fetch = require("node-fetch");
 
 router.post('/', async (req, res) => {
     try {
@@ -53,7 +54,15 @@ router.post('/search', async (req, res) => {
     try {
         const {searchString} = req.body;
         const reviews = await Comment.find({$text: {$search: searchString}});
-        return res.status(200).json(reviews);
+        let arrReviews = [];
+        if(reviews.length != 0){
+            for(let i=0; i<reviews.length; i++){
+                const response = await fetch(`https://reviewer-server-dkmy.onrender.com/api/reviews/${reviews[i].idReview}`);
+                const data = await response.json();
+                arrReviews.push(data)
+            }
+        }
+        return res.status(200).json(arrReviews);
     } catch (e) {
         console.log(e);
         res.send({message: 'Server error'});

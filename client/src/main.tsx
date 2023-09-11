@@ -10,6 +10,7 @@ import Review from './components/Review.tsx';
 import './i18n';
 import User from './components/User.tsx';
 import { GoogleOAuthProvider } from "@react-oauth/google"
+import Search from './components/Search.tsx';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/user/:idUser",
     element: <User />,
+  },
+  {
+    path: "/search",
+    element: <Search />,
   },
 ]);
 
