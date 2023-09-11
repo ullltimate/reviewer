@@ -14,6 +14,7 @@ import { addComment, getComments } from '../api/comments';
 import { checkInputs, resetInputs } from '../healpers/healper';
 import CardComment from './CardComment';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import Loader from './Loader';
 
 function Review() {
     const params = useParams();
@@ -96,7 +97,8 @@ function Review() {
   	  <>
 		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
         {
-            review  && 
+            review  
+            ?
             <Container>
                 <h2 className='my-5 text-center'>{review.nameReview}</h2>
                 <Row className='mb-3'>
@@ -109,7 +111,7 @@ function Review() {
                                 <h3>{review.title}</h3>
                             </Col>
                             <Col className='text-end'>
-                                <span>{rating}</span>
+                                <span>{rating.toFixed(1)}</span>
                                 <i className="bi bi-star-fill text-warning"></i>
                                 <ReactStars 
                                     key={`stars_${star}`}
@@ -157,8 +159,10 @@ function Review() {
                 <h4>{t('review.comments')} {comments ? comments.length : 0}</h4>
                 {
                 comments 
-                && 
+                ?
                 comments.map((el:any)=><CardComment key={el._id} nameUser={el.nameUser} comment={el.comment}/>)
+                :
+                <Loader />
                 }
                 {warning ? <p className='text-danger'>{t('review.commentWarning')}</p> : ''}
                 <InputGroup className="mb-3">
@@ -176,6 +180,8 @@ function Review() {
                     </Button>
                 </InputGroup>
             </Container>
+            :
+            <Loader />
         }
   	  </>
   	)

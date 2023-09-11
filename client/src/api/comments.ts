@@ -6,6 +6,8 @@ export const getComments = async (idReview: string, setComments: any) => {
         const  response  = await axios.get(`${urlAPI}/api/comments/${idReview}`);
         if (response.data.comments){
             setComments(response.data.comments)
+        } else {
+            setComments([]);
         }
     } catch (error) {
         console.log(error)
