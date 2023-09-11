@@ -34,5 +34,20 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+router.delete('/:id', async (req, res) => {
+    try {
+        const idReview = req.params.id;
+        const review = await Comment.findOne({idReview})
+        if(!review){
+            return res.status(404).json({message: "Comments this rewiew not found"});
+        }
+        await Comment.deleteOne({idReview});
+        return res.status(200).json({message: 'Comments this review remove'});
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
 
 module.exports = router

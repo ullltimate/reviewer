@@ -27,3 +27,12 @@ export const addComment = async (idReview: string, idUser: string, nameUser: str
         console.log(error)
     }
 }
+
+export const removeComments = async (idReview: string) => {
+    try {
+        const response = await axios.delete(`${urlAPI}/api/comments/${idReview}`);
+        console.log(response.data)
+    } catch (error) {
+        console.log(error)
+    }
+}
