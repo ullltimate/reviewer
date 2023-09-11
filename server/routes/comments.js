@@ -49,5 +49,16 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+router.post('/search', async (req, res) => {
+    try {
+        const {searchString} = req.body;
+        const reviews = await Comment.find({$text: {$search: searchString}});
+        return res.status(200).json(reviews);
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
 
 module.exports = router
