@@ -61,7 +61,7 @@ function CardReview(props:any) {
                             <Card.Title>{props.name}</Card.Title>
                         </Col>
                         <Col className='text-end' md={2}>
-                            <span>{rating}</span>
+                            <span>{rating.toFixed(1)}</span>
                             <i className="bi bi-star-fill text-warning"></i>
                         </Col>
                     </Row>
