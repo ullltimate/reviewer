@@ -15,7 +15,8 @@
     "cardReview": {
         "score": "Author's assessment:",
         "viewMore": "view more",
-        "posted": "Posted:"
+        "posted": "Posted:",
+        "like": "Like:"
     },
     "review": {
         "score": "Author's assessment:",

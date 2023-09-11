@@ -65,8 +65,15 @@ function CardReview(props:any) {
                             <i className="bi bi-star-fill text-warning"></i>
                         </Col>
                     </Row>
-      		        <Card.Text>{props.subtitle}</Card.Text>
-                    <Card.Text className=''>{`${props.t('cardReview.score')} ${props.score}/10`}</Card.Text>
+                    <Row>
+                        <Col>
+                            <Card.Text>{props.subtitle}</Card.Text>
+                        </Col>
+                        <Col className='text-end'>
+                            <small><span className='text-secondary'>{props.t('cardReview.like')} {amountLikes}</span></small>
+                        </Col>
+                    </Row>
+                    <Card.Text className='mt-3'>{`${props.t('cardReview.score')} ${props.score}/10`}</Card.Text>
                     <Row className='align-items-center justify-content-between'>
                         <Col>
                             <Button variant="link" className='px-0'><Link to={`/review/${props.id}`}>{props.t('cardReview.viewMore')}</Link></Button>
@@ -89,7 +96,6 @@ function CardReview(props:any) {
                             <small className="text-muted">{props.t('cardReview.posted')} {props.postedDate}</small>
                         </Col>
                         <Col className='p-0 text-end'>
-                            <small><span className='text-secondary'>{amountLikes}</span></small>
                             <Button variant="outline-secondary border-0" onClick={() => like()}>
                                 <small><i className={`bi bi-heart${(userLike)?'-fill':''}`}></i></small>
                             </Button>
