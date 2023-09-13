@@ -55,7 +55,9 @@
         "btnClose": "Close",
         "btnSave": "Save Changes",
         "checkInputs": "Please fill in all field!",
-        "checkInputsOptional": "Tags field is optional."
+        "checkInputsOptional": "Tags field is optional.",
+        "noFiles": "No files uploaded yet",
+        "fileName": "File name:"
     },
     "search":{
         "result": "Results:",

@@ -25,6 +25,7 @@ function CreateReview(props: any){
 	const CLOUDINARY_UPLOAD_PRESET: string = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 	const CLOUDINARY_CLOUD_NAME: string = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 	const [urlImage, setUrlImage] = useState('');
+	const [file, setFile] = useState<any|null>(null);
 
 	useEffect(() => {
 		(props.update != '') ? getReview(props.update, setReview) : setReview(null);
@@ -38,16 +39,19 @@ function CreateReview(props: any){
 			setScore(review.score);
 			setTags(`#${review.tags.join('#')}`);
 			setDescription(review.description);
+			setUrlImage(review.img);
 		} else {
-			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription]);
+			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setUrlImage]);
+			setFile(null);
 			setScore(0);
 		}
 	},[review])
 
 	async function save(){
-		if(checkInputs([nameReview, title, group, description])){
+		if(checkInputs([nameReview, title, group, description]) && file){
 			if (params.idUser) await createReview(nameReview, title, group, Number(score), tags.split('#').slice(1), description, params.idUser, urlImage);
-			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription]);
+			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setUrlImage]);
+			setFile(null);
 			setScore(0);
 			setWarning(false);
 		} else {
@@ -57,7 +61,7 @@ function CreateReview(props: any){
 
 	async function update() {
 		if(checkInputs([nameReview, title, group, description])){
-			await updateReview(props.update, nameReview, title, group, Number(score), tags.split('#').slice(1), description);
+			await updateReview(props.update, nameReview, title, group, Number(score), tags.split('#').slice(1), description, urlImage);
 			setWarning(false);
 		} else {
 			setWarning(true);
@@ -65,13 +69,15 @@ function CreateReview(props: any){
 	}
 
 	const changeImage = (file: any) => {
+		setFile(file);
 		const data = new FormData();
 		data.append("file", file);
 		data.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
 		data.append("cloud_name", CLOUDINARY_CLOUD_NAME);
 		addImage(data, CLOUDINARY_CLOUD_NAME, setUrlImage);
 	};
-	
+	//console.log(urlImage)
+
     return (
     <>
         <Modal {...props}>
@@ -132,8 +138,9 @@ function CreateReview(props: any){
       					/>
       				</Form.Group>
 					<FileUploader handleChange={changeImage} name="file" types={["jpg", "jpeg", "png"]} />
-      				<Form.Group
-      				    className="mb-3"
+					<small><span className="text-muted">{file ? `${t('createReview.fileName')} ${file.name}` : `${t('createReview.noFiles')}`}</span></small>
+					<Form.Group
+      				    className="my-3"
       				    controlId="exampleForm.ControlTextarea1"
       				>
       				    <Form.Label>{t('createReview.description')}</Form.Label>

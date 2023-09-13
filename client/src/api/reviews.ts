@@ -80,7 +80,7 @@ export const removeReview = async (id: string, setIsDeleted?: any) => {
     }
 }
 
-export const updateReview = async (id: string, nameReview: string, title: string, group: string, score: number, tags: string[], description: string) => {
+export const updateReview = async (id: string, nameReview: string, title: string, group: string, score: number, tags: string[], description: string, img: string) => {
     try {
         const response = await axios.put(`${urlAPI}/api/reviews/${id}`, {
             nameReview,
@@ -88,6 +88,7 @@ export const updateReview = async (id: string, nameReview: string, title: string
             group,
             tags,
             description,
+            img,
             score,
         })
         console.log(response.data)
