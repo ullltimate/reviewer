@@ -6,6 +6,8 @@ import { createReview, getReview, updateReview } from "../api/reviews";
 import { checkInputs, resetInputs } from "../healpers/healper";
 import { IReview } from "../types/types";
 import { useTranslation } from "react-i18next";
+import { FileUploader } from "react-drag-drop-files";
+import { addImage } from "../api/cloudinary";
 
 function CreateReview(props: any){
 	const { t } = useTranslation();
@@ -20,6 +22,9 @@ function CreateReview(props: any){
 	const [warning, setWarning] = useState(false);
 	const [review, setReview] = useState<IReview | null>(null)
 	const idReview = props.update;
+	const CLOUDINARY_UPLOAD_PRESET: string = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+	const CLOUDINARY_CLOUD_NAME: string = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+	const [urlImage, setUrlImage] = useState('');
 
 	useEffect(() => {
 		(props.update != '') ? getReview(props.update, setReview) : setReview(null);
@@ -41,7 +46,7 @@ function CreateReview(props: any){
 
 	async function save(){
 		if(checkInputs([nameReview, title, group, description])){
-			if (params.idUser) await createReview(nameReview, title, group, Number(score), tags.split('#').slice(1), description, params.idUser);
+			if (params.idUser) await createReview(nameReview, title, group, Number(score), tags.split('#').slice(1), description, params.idUser, urlImage);
 			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription]);
 			setScore(0);
 			setWarning(false);
@@ -59,6 +64,14 @@ function CreateReview(props: any){
 		}
 	}
 
+	const changeImage = (file: any) => {
+		const data = new FormData();
+		data.append("file", file);
+		data.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+		data.append("cloud_name", CLOUDINARY_CLOUD_NAME);
+		addImage(data, CLOUDINARY_CLOUD_NAME, setUrlImage);
+	};
+	
     return (
     <>
         <Modal {...props}>
@@ -78,7 +91,6 @@ function CreateReview(props: any){
 							onChange={(e) => setNameReview(e.target.value)}
       						placeholder={t('createReview.reviewTitlePlaceholder')}
 							required
-      						autoFocus
       					/>
       				</Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -119,6 +131,7 @@ function CreateReview(props: any){
       						placeholder={t('createReview.tagsPlaceholder')}
       					/>
       				</Form.Group>
+					<FileUploader handleChange={changeImage} name="file" types={["jpg", "jpeg", "png"]} />
       				<Form.Group
       				    className="mb-3"
       				    controlId="exampleForm.ControlTextarea1"

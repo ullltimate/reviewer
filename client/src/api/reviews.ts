@@ -50,7 +50,7 @@ export const getReview = async (id: string, setReview: any) => {
     }
 }
 
-export const createReview = async (nameReview: string, title: string, group: string, score: number, tags: string[], description: string, idAutor: string) => {
+export const createReview = async (nameReview: string, title: string, group: string, score: number, tags: string[], description: string, idAutor: string, img: string) => {
 	try {
         const response  = await axios.post(`${urlAPI}/api/reviews/newReview`, {
             nameReview,
@@ -58,6 +58,7 @@ export const createReview = async (nameReview: string, title: string, group: str
             group,
             tags,
             description,
+            img,
             score,
             idAutor
         })
