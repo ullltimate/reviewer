@@ -1,4 +1,4 @@
-import { Modal, Form, Button, Col, Row } from "react-bootstrap"
+import { Modal, Form, Button, Col, Row, Spinner } from "react-bootstrap"
 import Select from "./Select"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -6,6 +6,8 @@ import { createReview, getReview, updateReview } from "../api/reviews";
 import { checkInputs, resetInputs } from "../healpers/healper";
 import { IReview } from "../types/types";
 import { useTranslation } from "react-i18next";
+import { FileUploader } from "react-drag-drop-files";
+import { addImage } from "../api/cloudinary";
 
 function CreateReview(props: any){
 	const { t } = useTranslation();
@@ -20,6 +22,11 @@ function CreateReview(props: any){
 	const [warning, setWarning] = useState(false);
 	const [review, setReview] = useState<IReview | null>(null)
 	const idReview = props.update;
+	const CLOUDINARY_UPLOAD_PRESET: string = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+	const CLOUDINARY_CLOUD_NAME: string = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+	const [urlImage, setUrlImage] = useState('');
+	const [file, setFile] = useState<any|null>(null);
+	const [loader, setLoader] = useState(false);
 
 	useEffect(() => {
 		(props.update != '') ? getReview(props.update, setReview) : setReview(null);
@@ -33,18 +40,23 @@ function CreateReview(props: any){
 			setScore(review.score);
 			setTags(`#${review.tags.join('#')}`);
 			setDescription(review.description);
+			setUrlImage(review.img);
 		} else {
-			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription]);
+			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setUrlImage]);
+			setFile(null);
 			setScore(0);
 		}
 	},[review])
 
 	async function save(){
-		if(checkInputs([nameReview, title, group, description])){
-			if (params.idUser) await createReview(nameReview, title, group, Number(score), tags.split('#').slice(1), description, params.idUser);
-			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription]);
-			setScore(0);
+		if(checkInputs([nameReview, title, group, description]) && file){
+			setLoader(true);
 			setWarning(false);
+			if (params.idUser) await createReview(nameReview, title, group, Number(score), tags.split('#').slice(1), description, params.idUser, urlImage);
+			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setUrlImage]);
+			setFile(null);
+			setScore(0);
+			setLoader(false);
 		} else {
 			setWarning(true);
 		}
@@ -52,12 +64,24 @@ function CreateReview(props: any){
 
 	async function update() {
 		if(checkInputs([nameReview, title, group, description])){
-			await updateReview(props.update, nameReview, title, group, Number(score), tags.split('#').slice(1), description);
+			setLoader(true);
 			setWarning(false);
+			await updateReview(props.update, nameReview, title, group, Number(score), tags.split('#').slice(1), description, urlImage);
+			setLoader(false);
 		} else {
 			setWarning(true);
 		}
 	}
+
+	const changeImage = (file: any) => {
+		setFile(file);
+		const data = new FormData();
+		data.append("file", file);
+		data.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+		data.append("cloud_name", CLOUDINARY_CLOUD_NAME);
+		addImage(data, CLOUDINARY_CLOUD_NAME, setUrlImage);
+	};
+	//console.log(urlImage)
 
     return (
     <>
@@ -78,7 +102,6 @@ function CreateReview(props: any){
 							onChange={(e) => setNameReview(e.target.value)}
       						placeholder={t('createReview.reviewTitlePlaceholder')}
 							required
-      						autoFocus
       					/>
       				</Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -119,8 +142,10 @@ function CreateReview(props: any){
       						placeholder={t('createReview.tagsPlaceholder')}
       					/>
       				</Form.Group>
-      				<Form.Group
-      				    className="mb-3"
+					<FileUploader handleChange={changeImage} name="file" types={["jpg", "jpeg", "png"]} />
+					<small><span className="text-muted">{file ? `${t('createReview.fileName')} ${file.name}` : `${t('createReview.noFiles')}`}</span></small>
+					<Form.Group
+      				    className="my-3"
       				    controlId="exampleForm.ControlTextarea1"
       				>
       				    <Form.Label>{t('createReview.description')}</Form.Label>
@@ -138,9 +163,24 @@ function CreateReview(props: any){
       			<Button variant="secondary" onClick={props.onHide}>
 				  {t('createReview.btnClose')}
       			</Button>
-      			<Button variant="primary" onClick={() => (props.update === '') ? save() : update()}>
-				  {t('createReview.btnSave')}
-      			</Button>
+				{
+					loader
+					?
+					<Button variant="primary" disabled>
+					<Spinner
+					  as="span"
+					  animation="border"
+					  size="sm"
+					  role="status"
+					  aria-hidden="true"
+					/>
+					Loading...
+				  	</Button>
+					:
+					<Button variant="primary" onClick={() => (props.update === '') ? save() : update()}>
+					{t('createReview.btnSave')}
+					</Button>
+				}
       		</Modal.Footer>
       	</Modal>
     </>
