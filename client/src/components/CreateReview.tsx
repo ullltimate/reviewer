@@ -1,4 +1,4 @@
-import { Modal, Form, Button, Col, Row } from "react-bootstrap"
+import { Modal, Form, Button, Col, Row, Spinner } from "react-bootstrap"
 import Select from "./Select"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -26,6 +26,7 @@ function CreateReview(props: any){
 	const CLOUDINARY_CLOUD_NAME: string = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 	const [urlImage, setUrlImage] = useState('');
 	const [file, setFile] = useState<any|null>(null);
+	const [loader, setLoader] = useState(false);
 
 	useEffect(() => {
 		(props.update != '') ? getReview(props.update, setReview) : setReview(null);
@@ -49,11 +50,13 @@ function CreateReview(props: any){
 
 	async function save(){
 		if(checkInputs([nameReview, title, group, description]) && file){
+			setLoader(true);
+			setWarning(false);
 			if (params.idUser) await createReview(nameReview, title, group, Number(score), tags.split('#').slice(1), description, params.idUser, urlImage);
 			resetInputs([setNameReview, setTitle, setGroup, setTags, setDescription, setUrlImage]);
 			setFile(null);
 			setScore(0);
-			setWarning(false);
+			setLoader(false);
 		} else {
 			setWarning(true);
 		}
@@ -61,8 +64,10 @@ function CreateReview(props: any){
 
 	async function update() {
 		if(checkInputs([nameReview, title, group, description])){
-			await updateReview(props.update, nameReview, title, group, Number(score), tags.split('#').slice(1), description, urlImage);
+			setLoader(true);
 			setWarning(false);
+			await updateReview(props.update, nameReview, title, group, Number(score), tags.split('#').slice(1), description, urlImage);
+			setLoader(false);
 		} else {
 			setWarning(true);
 		}
@@ -158,9 +163,24 @@ function CreateReview(props: any){
       			<Button variant="secondary" onClick={props.onHide}>
 				  {t('createReview.btnClose')}
       			</Button>
-      			<Button variant="primary" onClick={() => (props.update === '') ? save() : update()}>
-				  {t('createReview.btnSave')}
-      			</Button>
+				{
+					loader
+					?
+					<Button variant="primary" disabled>
+					<Spinner
+					  as="span"
+					  animation="border"
+					  size="sm"
+					  role="status"
+					  aria-hidden="true"
+					/>
+					Loading...
+				  	</Button>
+					:
+					<Button variant="primary" onClick={() => (props.update === '') ? save() : update()}>
+					{t('createReview.btnSave')}
+					</Button>
+				}
       		</Modal.Footer>
       	</Modal>
     </>
