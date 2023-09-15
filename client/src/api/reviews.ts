@@ -1,13 +1,16 @@
 import axios from "axios"
-import { urlAPI } from "../healpers/healper";
+import { convertObject, urlAPI } from "../healpers/healper";
 import { removeLikes } from "./likes";
 import { removeComments } from "./comments";
 
-export const getAllTags = async (setAllTags: any, setOnTags: any) => {
+export const getAllTags = async (setAllTags: any, setOnTags: any, setDataTags?: any) => {
 	try {
         const  response  = await axios.get(`${urlAPI}/api/reviews`)
         setAllTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
         setOnTags(Array.from(new Set(response.data.map((el:any)=>el.tags).flat())).concat([[]]))
+        if(setDataTags){
+            setDataTags(convertObject(response.data.map((el:any)=>el.tags).flat()))
+        }
     } catch (error) {
         console.log(error)
     }

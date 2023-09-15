@@ -21,3 +21,8 @@ export interface IReview {
     tags: string[],
     averageRating: number,
 }
+
+export interface ITagCloud {
+    value: string,
+    count: number,
+}
