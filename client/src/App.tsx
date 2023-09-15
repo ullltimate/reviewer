@@ -7,11 +7,10 @@ import CardReview from './components/CardReview';
 import { useTranslation } from "react-i18next";
 import { useTheme } from './hooks/useTheme';
 import { filteredByTags, getAllTags } from './api/reviews';
-import { IReview } from './types/types';
+import { IReview, ITagCloud } from './types/types';
 import CreateReview from './components/CreateReview';
-import Tags from './components/Tags';
-import Select from './components/Select';
 import Loader from './components/Loader';
+import { TagCloud } from 'react-tagcloud'
 
 function App() {
 	const [key, setKey] = useState('recent');
@@ -28,7 +27,7 @@ function App() {
 	const [amountAllReviews, setAmountAllReviews] = useState(0);
 	const [allTags, setAllTags] = useState<any[]>([]);
 	const [onTags, setOnTags] = useState<any[]>([]);
-	const [tag, setTag] = useState('');
+	const [dataTags, setDataTags] = useState<ITagCloud[] | null>(null);
 	const limit = 5;
 	let items = [];
 	for (let number = 1; number <= Math.ceil(amountAllReviews/limit); number++) {
@@ -50,12 +49,8 @@ function App() {
 	const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
 
 	useEffect(() => {
-		getAllTags(setAllTags, setOnTags);
+		getAllTags(setAllTags, setOnTags, setDataTags);
 	},[])
-
-	useEffect(() => {
-		if(tag != '') setOnTags(Array.from(new Set(onTags.concat(tag))))
-	}, [tag]);
 
 	useEffect(() => {
 		filteredByTags(onTags, key, setAllReviews, setAmountAllReviews)
@@ -69,17 +64,25 @@ function App() {
       			<Accordion.Item eventKey="0" className='border-0 mt-5'>
       			  	<Accordion.Header className='border' style={{maxWidth: '200px', marginRight: 0, marginLeft: 'auto'}}>{t('app.tagsCloud')}</Accordion.Header>
       			  	<Accordion.Body className='p-0 mb-3'>
-						<Row>
+						<Row className='align-items-center'>
 							<Col md={2}>
-								<Select name={t('app.tags')} options={allTags} value={tag} setValue={setTag}/>
-							</Col>
-							<Col md={2}>
-								<Button variant="outline-success" className='w-100 mb-3' onClick={() => setOnTags(allTags)}>
+								<Button variant="outline-success" className='w-100 my-3' onClick={() => setOnTags(allTags)}>
 									{t('app.reset')}
 								</Button>
 							</Col>
+							<Col>
+							{
+								dataTags &&
+								<TagCloud
+									className='text-center'
+  								  	minSize={12}
+  								  	maxSize={35}
+  								  	tags={dataTags}
+  								  	onClick={(tag:any) => {setOnTags([tag.value]), setActivePage(1)}}
+  								/>
+							}
+							</Col>
 						</Row>
-						<Tags tags={onTags} setOnTags={setOnTags}/>
       			  	</Accordion.Body>
       			</Accordion.Item>
     		</Accordion>

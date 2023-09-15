@@ -15,3 +15,17 @@ export function checkInputs(valueInputs: string[]){
 export function resetInputs(valueInputs: any[]){
     valueInputs.forEach((el: any) => el(''));
 }
+
+export function convertObject(array: string[]){
+    let count: any = {};
+
+    for (let elem of array) {
+        if (count[elem] === undefined) {
+        count[elem] = 1;
+        } else {
+        count[elem]++;
+        }
+    }
+
+    return Object.entries(count).map(el => el = {...el}).map(obj => {return {"value": obj[0], "count": obj[1]}})
+}
