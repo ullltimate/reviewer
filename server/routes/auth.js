@@ -137,7 +137,7 @@ router.post('/login', async (req, res) => {
         if (!user){
             return res.status(404).json({message: "User with this id not found"});
         }
-        const token = jwt.sign({id: user.id}, process.env.SECRET_KEY, {expiresIn:"1h"});
+        const token = jwt.sign({id: user.id}, process.env.SECRET_KEY, {expiresIn:"100"});
         return res.json({
             token,
             user: user
@@ -148,5 +148,25 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.post('/auth', async (req, res) => {
+    try {
+        const {token} = req.body;
+        let _id;
+        const decoded = jwt.verify(token, process.env.SECRET_KEY, function(err, decoded) {
+            if (err) {
+                return res.status(400).json({message: "Token has expired"});
+            } else {
+                _id = decoded.id;
+            }
+        });
+        if (_id) {
+            const user = await User.findOne({_id});
+            return res.status(200).json(user);
+        }
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
 
 module.exports = router
