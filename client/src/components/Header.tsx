@@ -13,7 +13,7 @@ function Header(props: any) {
 
     useEffect(() => {
         if (user) setUserObject(JSON.parse(user))
-    },[accessToken])
+    },[accessToken, user])
 
     const handlerTheme = () => {
         if (props.theme === 'light'){

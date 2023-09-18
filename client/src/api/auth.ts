@@ -41,14 +41,15 @@ export const getToken = async (_id: string) => {
     }
 }
 
-export const getUserByToken = async (token: string, setUser: any) => {
+export const getUserByToken = async (token: string, setUser: any, setWarning: any) => {
 	try {
         const  response  = await axios.post(`${urlAPI}/api/auth/auth`, {
             token,
         })
         localStorage.setItem('user', JSON.stringify(response.data))
         setUser(response.data)
-    } catch (error) {
-        console.log(error)
+    } catch (error: any) {
+        console.log(error.response.data.message)
+        setWarning(true);
     }
 }

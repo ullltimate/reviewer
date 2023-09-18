@@ -147,7 +147,7 @@ router.post('/login', async (req, res) => {
         if (!user){
             return res.status(404).json({message: "User with this id not found"});
         }
-        const token = jwt.sign({id: user.id}, process.env.SECRET_KEY, {expiresIn:"1h"});
+        const token = jwt.sign({id: user.id}, process.env.SECRET_KEY, {expiresIn: 60*60});
         return res.json({
             token,
             user: user

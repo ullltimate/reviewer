@@ -12,6 +12,7 @@ import CreateReview from "./CreateReview";
 import Loader from "./Loader";
 import Select from "./Select";
 import Tags from "./Tags";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
     const accessToken = localStorage.getItem('accessToken');
@@ -30,10 +31,20 @@ function Profile() {
 	const [amoutLikes, setAmountLikes] = useState(0);
 	const [isDeleted, setIsDeleted] = useState(false);
 	const [sort, setSort] = useState('');
+    const [warning, setWarning] = useState(false);
+    const navigate = useNavigate();
     
     useEffect(() => {
-        if(accessToken) getUserByToken(accessToken, setUser);
+        if(accessToken) getUserByToken(accessToken, setUser, setWarning);
     }, [])
+
+    useEffect(() => {
+        if(warning){
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("user");
+            localStorage.removeItem("loginWith");
+        }
+    },[warning])
 
 	const handleShow = () => {setEdit(false); setShowCreate(true)};
 	const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
@@ -102,6 +113,15 @@ function Profile() {
 						</Row>
 					</>
 					: 
+                    warning 
+                    ?
+                    <div className="text-center mt-5">
+                        <h3 className="my-3">Token has expired!</h3>
+                        <Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => navigate('/login')}>
+                            Login again!
+						</Button>
+                    </div>
+                    :
 					<Loader />
 				}
   	  	    </Container>
