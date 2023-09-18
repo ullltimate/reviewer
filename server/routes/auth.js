@@ -179,4 +179,20 @@ router.post('/auth', async (req, res) => {
     }
 })
 
+router.put('/admin/:id', async(req, res) => {
+    try {
+        const _id = req.params.id;
+        const {isAdmin} = req.body;
+        const user = await User.findOne({_id});
+        if(!user){
+            return res.status(404).json({message: "User with this id not found"});
+        }
+        await User.updateOne({_id}, {$set: {isAdmin: isAdmin}});
+        return res.status(200).json({message: `User ${_id} is admin`});
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
 module.exports = router
