@@ -1,10 +1,10 @@
 import {  Button, Card, Col, Container, Row } from 'react-bootstrap';
 import Header from './Header';
 import { useTranslation } from "react-i18next";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useGoogleLogin } from "@react-oauth/google"
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserGoogle } from '../api/auth';
 import Loader from './Loader';
 
@@ -14,6 +14,8 @@ function Login() {
 	const {theme, setTheme} = useTheme();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+	const searchParams = new URLSearchParams(useLocation().search);
+    const searchString = searchParams.get('token');
 
 	const GITHUB_CLIENT_ID: string = import.meta.env.VITE_GITHUB_CLIENT_ID;
 
@@ -28,6 +30,13 @@ function Login() {
 		 getUserGoogle(tokenResponse.access_token, navigate, setLoading)
 		},
 	})
+
+	useEffect(() => {
+		if(searchString){
+			localStorage.setItem("accessToken", searchString);
+			navigate('/profile');
+		}
+	},[])
 
   	return (
   	  	<>

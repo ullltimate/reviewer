@@ -85,7 +85,7 @@ function Header(props: any) {
                 {
                     userObject && 
                     <Navbar.Text className='pt-0'>
-                        {props.t('header.signed')} <Link to={`/user/${userObject._id}`}>{userObject.name}</Link>
+                        {props.t('header.signed')} <Link to={`/profile`}>{userObject.name}</Link>
                     </Navbar.Text>
                 }
             </Container>
