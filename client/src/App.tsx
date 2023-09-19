@@ -54,7 +54,7 @@ function App() {
 
 	useEffect(() => {
 		filteredByTags(onTags, key, setAllReviews, setAmountAllReviews)
-	},[isDeleted, key, onTags])
+	},[isDeleted, key, onTags, showCreate])
 
   	return (
   	  <>
