@@ -63,5 +63,12 @@
         "result": "Results:",
         "notFound": "No results were found for your request",
         "waitQuery": "please enter your query in the search field!"
+    },
+    "adminPanel": {
+        "btnAdmin": "Admin panel",
+        "btnReview": "Review panel",
+        "login": "Login",
+        "email": "Email",
+        "loginWith": "Login with"
     }
 }

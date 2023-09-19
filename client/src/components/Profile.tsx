@@ -98,10 +98,10 @@ function Profile() {
                                     &&
                                     <>
                                         <Button variant="outline-danger" className='w-100 mb-3' onClick={() => setAdminPanel(true)}>
-                                            Admin panel
+                                            {t('adminPanel.btnAdmin')}
                                         </Button>
                                         <Button variant="outline-danger" className='w-100 mb-3' onClick={() => setAdminPanel(false)}>
-                                            Review panel
+                                            {t('adminPanel.btnReview')}
                                         </Button>
                                     </>
                                 }
