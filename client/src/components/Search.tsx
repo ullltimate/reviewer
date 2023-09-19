@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "../hooks/useTheme";
 import Header from "./Header";
 import { Container } from "react-bootstrap";
 import { IReview } from "../types/types";
@@ -9,11 +8,10 @@ import { getSearchReview } from "../api/reviews";
 import Loader from "./Loader";
 import CardReview from "./CardReview";
 import CreateReview from "./CreateReview";
+import { convertDate } from "../healpers/healper";
 
 function Search() {
-    const { t, i18n: {changeLanguage, language} } = useTranslation();
-	const [currentLanguage, setCurrentLanguage] = useState(language);
-    const {theme, setTheme} = useTheme();
+    const { t, i18n: {language} } = useTranslation();
     const searchParams = new URLSearchParams(useLocation().search);
     const searchString = searchParams.get('searchTerm');
     const [searchResults, setSearchResults] = useState<IReview[]|null>(null);
@@ -32,7 +30,7 @@ function Search() {
 
   	return (
   	    <>
-            <Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
+            <Header />
             <Container>
                 <h3>{t('search.result')}</h3>
                 {
@@ -48,7 +46,7 @@ function Search() {
                         {t('search.notFound')}
                     </h4>
                     :
-                    searchResults.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
+                    searchResults.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={convertDate(language, el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
                     :
                     <Loader />
                 }

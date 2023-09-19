@@ -4,8 +4,12 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { IUser } from '../types/types';
 import Logo from './Logo';
+import { useTheme } from '../hooks/useTheme';
+import { useTranslation } from 'react-i18next';
 
-function Header(props: any) {
+function Header() {
+    const { t, i18n: {changeLanguage, language} } = useTranslation();
+	const {theme, setTheme} = useTheme();
     const accessToken: string | null = localStorage.getItem("accessToken");
     const user: string | null = localStorage.getItem('user');
 	const navigate = useNavigate();
@@ -18,17 +22,16 @@ function Header(props: any) {
     },[accessToken, user])
 
     const handlerTheme = () => {
-        if (props.theme === 'light'){
-            props.setTheme('dark');
+        if (theme === 'light'){
+            setTheme('dark');
         } else {
-            props.setTheme('light');
+            setTheme('light');
         }
     }
 
     const handleChangeLanguage = () => {
-        const newLanguage = props.currentLanguage === "en" ? "ru" : "en";
-        props.setCurrentLanguage(newLanguage);
-        props.changeLanguage(newLanguage);
+        const newLanguage = language === "en" ? "ru" : "en";
+        changeLanguage(newLanguage);
     }
 
     const logOut = () => {
@@ -53,24 +56,24 @@ function Header(props: any) {
         <Navbar bg="bg-transparent flex-wrap">
             <Container >
                 <Link to={"/"} className='d-flex align-items-center text-decoration-none text-reset'>
-                    <Logo theme={props.theme}/>
+                    <Logo theme={theme}/>
                     <h1 className='m-0'>reviewer</h1>
                 </Link>
                 <Nav className='align-items-center'>
                     {
                     !accessToken || !userObject
-                    ? <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{props.t('header.login')}</Link>
-                    : <Button variant={props.theme} className='bg-transparent border-0' onClick={() => logOut()}>{props.t('header.logout')}</Button>
+                    ? <Link to={"/login"} className='p-3 text-decoration-none text-reset'>{t('header.login')}</Link>
+                    : <Button variant={theme} className='bg-transparent border-0' onClick={() => logOut()}>{t('header.logout')}</Button>
                     }
-                    <Button variant={props.theme} className='bg-transparent border-0' onClick={handlerTheme}>
+                    <Button variant={theme} className='bg-transparent border-0' onClick={handlerTheme}>
                         {
-                            props.theme === 'light' 
+                            theme === 'light' 
                             ? <i className="bi bi-moon-stars"></i>
                             : <i className="bi bi-brightness-high"></i>
                         }
                     </Button>
-                    <Button variant={props.theme} onClick={handleChangeLanguage} className="pe-0 bg-transparent border-0 text-uppercase">
-                        <i className="bi bi-globe"></i> {props.currentLanguage}
+                    <Button variant={theme} onClick={handleChangeLanguage} className="pe-0 bg-transparent border-0 text-uppercase">
+                        <i className="bi bi-globe"></i> {language}
                     </Button>
                 </Nav>
             </Container>
@@ -78,7 +81,7 @@ function Header(props: any) {
                 {
                     userObject && 
                     <Navbar.Text className='pt-0'>
-                        {props.t('header.signed')} <Link to={`/profile`}>{userObject.name}</Link>
+                        {t('header.signed')} <Link to={`/profile`}>{userObject.name}</Link>
                     </Navbar.Text>
                 }
             </Container>
@@ -86,7 +89,7 @@ function Header(props: any) {
                 <Form className="d-flex">
                     <Form.Control
                       type="search"
-                      placeholder={props.t('header.search')}
+                      placeholder={t('header.search')}
                       className={`me-2 ${emptySearch ? 'border border-danger' : ''}`}
                       aria-label="Search"
                       value={searchValue}
@@ -94,7 +97,7 @@ function Header(props: any) {
                       onChange={(e) => setSearchValue(e.target.value)}
                     />
                     <Button variant="outline-success" type='submit' onClick={search}>
-                        {props.t('header.search')}
+                        {t('header.search')}
                     </Button>
                 </Form>
             </Container>

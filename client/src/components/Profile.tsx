@@ -14,13 +14,13 @@ import Select from "./Select";
 import Tags from "./Tags";
 import { useNavigate } from "react-router-dom";
 import AdminPanel from "./AdminPanel";
+import { convertDate } from "../healpers/healper";
 
 function Profile() {
     const accessToken = localStorage.getItem('accessToken');
     const [user, setUser] = useState<IUser | null>(null);
-    const { t, i18n: {changeLanguage, language} } = useTranslation();
-	const [currentLanguage, setCurrentLanguage] = useState(language);
-	const {theme, setTheme} = useTheme();
+    const { t, i18n: {language} } = useTranslation();
+	const {theme} = useTheme();
     const [showCreate, setShowCreate] = useState<boolean>(false);
 	const [reviewsByAutor, setReviewsByAutor] = useState<IReview[]>([]);
 	const [allTags, setAllTags] = useState<any[]>([]);
@@ -74,14 +74,7 @@ function Profile() {
 
   	return (
   	  	<>
-            <Header 
-				currentLanguage={currentLanguage} 
-				setCurrentLanguage={setCurrentLanguage} 
-				changeLanguage={changeLanguage} 
-				t={t} 
-				theme={theme} 
-				setTheme={setTheme}
-			/>
+            <Header />
   	  	    <Container>
 				{
 					user 
@@ -125,7 +118,7 @@ function Profile() {
                                     :
                                     (reviewsByAutor.length != 0) 
 									?
-									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
+									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={convertDate(language, el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
 									: <h3 className='text-center mt-3'>{t('userPage.reviewNotFound')}</h3>
 								}
 							</Col>

@@ -9,9 +9,8 @@ import { getUserGoogle } from '../api/auth';
 import Loader from './Loader';
 
 function Login() {
-	const { t, i18n: {changeLanguage, language} } = useTranslation();
-	const [currentLanguage, setCurrentLanguage] = useState(language);
-	const {theme, setTheme} = useTheme();
+	const { t } = useTranslation();
+	const {theme} = useTheme();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const searchParams = new URLSearchParams(useLocation().search);
@@ -40,7 +39,7 @@ function Login() {
 
   	return (
   	  	<>
-		  	<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
+		  	<Header />
 			{
 				loading 
 				?

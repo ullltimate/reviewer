@@ -2,7 +2,6 @@ import { Button, Col, Container, Row, Image, Badge } from 'react-bootstrap';
 import Header from './Header';
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from 'react';
-import { useTheme } from '../hooks/useTheme';
 import { useParams } from 'react-router-dom';
 import { getUser } from '../api/auth';
 import CreateReview from './CreateReview';
@@ -13,11 +12,10 @@ import { filteredReviews, getAllTags, getReviewsByAutor } from '../api/reviews';
 import { IReview, IUser } from '../types/types';
 import { getLikesByAutor } from '../api/likes';
 import Loader from './Loader';
+import { convertDate } from '../healpers/healper';
 
 function User() {
-	const { t, i18n: {changeLanguage, language} } = useTranslation();
-	const [currentLanguage, setCurrentLanguage] = useState(language);
-	const {theme, setTheme} = useTheme();
+	const { t, i18n: {language} } = useTranslation();
 	const params = useParams();
 	const idUser = params.idUser;
 	const [user, setUser] = useState<IUser|null>(null);
@@ -60,14 +58,7 @@ function User() {
 
   	return (
   	  	<>
-  	  		<Header 
-				currentLanguage={currentLanguage} 
-				setCurrentLanguage={setCurrentLanguage} 
-				changeLanguage={changeLanguage} 
-				t={t} 
-				theme={theme} 
-				setTheme={setTheme}
-			/>
+  	  		<Header />
   	  	    <Container>
 				{
 					user 
@@ -94,7 +85,7 @@ function User() {
 							<Col>
 								{   (reviewsByAutor.length != 0) 
 									?
-									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
+									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={convertDate(language, el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
 									: <h3 className='text-center mt-3'>{t('userPage.reviewNotFound')}</h3>
 								}
 							</Col>

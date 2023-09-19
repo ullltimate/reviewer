@@ -3,7 +3,6 @@ import Header from './Header';
 import { Col, Container, Row, Image, Button, InputGroup, Form } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { useTheme } from '../hooks/useTheme';
 import { getReview, removeReview } from '../api/reviews';
 import { IReview } from '../types/types';
 import ReactStars from 'react-rating-star-with-type';
@@ -11,7 +10,7 @@ import { addRating, getRating } from '../api/rating';
 import { addLikes, deleteLikes, getLikes } from '../api/likes';
 import CreateReview from './CreateReview';
 import { addComment, getComments } from '../api/comments';
-import { checkInputs, resetInputs } from '../healpers/healper';
+import { checkInputs, convertDate, resetInputs } from '../healpers/healper';
 import CardComment from './CardComment';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import Loader from './Loader';
@@ -21,9 +20,7 @@ function Review() {
     const params = useParams();
     const idReview: string | undefined = params.idReview;
     const [review, setReview] = useState<IReview>();
-    const { t, i18n: {changeLanguage, language} } = useTranslation();
-	const [currentLanguage, setCurrentLanguage] = useState(language);
-    const {theme, setTheme} = useTheme();
+    const { t, i18n: {language} } = useTranslation();
     const user = localStorage.getItem('user');
     const [star, setStar] = useState(0);
     const [editStar, setEditStar] = useState(true);
@@ -101,7 +98,7 @@ function Review() {
 
   	return (
   	  <>
-		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
+		<Header />
         {
             review  
             ?
@@ -150,7 +147,7 @@ function Review() {
                             </Row>
                             <Row className='align-items-center'>
                                 <Col>
-                                    <p className='mb-0'>{t('review.posted')} {Intl.DateTimeFormat(currentLanguage).format(review.creationDate)}</p>
+                                    <p className='mb-0'>{t('review.posted')} {convertDate(language, review.creationDate)}</p>
                                 </Col>
                                 <Col className='text-end'>
                                     <Button variant="outline-secondary border-0" onClick={() => like()}>

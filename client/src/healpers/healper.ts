@@ -29,3 +29,7 @@ export function convertObject(array: string[]){
 
     return Object.entries(count).map(el => el = {...el}).map(obj => {return {"value": obj[0], "count": obj[1]}})
 }
+
+export function convertDate(language: string, date: number) {
+    return Intl.DateTimeFormat(language).format(date)
+}
