@@ -111,7 +111,7 @@ function Profile() {
 								<Button variant="outline-success" className='w-100 mb-3' onClick={() => {setGroup(''); setTag(''); setOnTags(allTags); setSort('')}}>
 									{t('userPage.btnReset')}
 								</Button>
-								<CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''}/>
+								<CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''} alltags={allTags}/>
 								<Select name={t('userPage.sort')} options={['rating', 'date']} value={sort} setValue={setSort}/>
 								<Select name={t('userPage.groups')} options={['movies', 'books', 'games']} value={group} setValue={setGroup}/>
 								<Select name={t('userPage.tags')} options={allTags} value={tag} setValue={setTag}/>

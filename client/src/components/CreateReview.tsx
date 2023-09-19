@@ -145,7 +145,14 @@ function CreateReview(props: any){
 							value={tags}
 							onChange={(e) => setTags(e.target.value)}
       						placeholder={t('createReview.tagsPlaceholder')}
+							list="datalistOptions"
       					/>
+						<datalist id="datalistOptions">
+							{
+							props.alltags &&
+							props.alltags.filter((el: any)=> typeof el === 'string' && el !== '').map((el: any, i: number) => <option key={i} value={`#${el}`}></option>)
+							}
+						</datalist>	
       				</Form.Group>
 					<FileUploader handleChange={changeImage} name="file" types={["jpg", "jpeg", "png"]} />
 					<small><span className="text-muted">{file ? `${t('createReview.fileName')} ${file.name}` : `${t('createReview.noFiles')}`}</span></small>
