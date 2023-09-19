@@ -13,6 +13,7 @@ import Loader from "./Loader";
 import Select from "./Select";
 import Tags from "./Tags";
 import { useNavigate } from "react-router-dom";
+import AdminPanel from "./AdminPanel";
 
 function Profile() {
     const accessToken = localStorage.getItem('accessToken');
@@ -33,6 +34,7 @@ function Profile() {
 	const [sort, setSort] = useState('');
     const [warning, setWarning] = useState(false);
     const navigate = useNavigate();
+    const [adminPanel, setAdminPanel] = useState(false);
     
     useEffect(() => {
         if(accessToken) getUserByToken(accessToken, setUser, setWarning);
@@ -91,6 +93,18 @@ function Profile() {
 								<h5 className='mb-1'>{user.name}</h5>
 								<Badge bg="danger" className='mb-1'><i className="bi bi-suit-heart-fill"></i> {amoutLikes}</Badge>
 								<p className='mb-3'>{user.email}</p>
+                                {
+                                    user.isAdmin === 'true'
+                                    &&
+                                    <>
+                                        <Button variant="outline-danger" className='w-100 mb-3' onClick={() => setAdminPanel(true)}>
+                                            Admin panel
+                                        </Button>
+                                        <Button variant="outline-danger" className='w-100 mb-3' onClick={() => setAdminPanel(false)}>
+                                            Review panel
+                                        </Button>
+                                    </>
+                                }
 								<Button variant="outline-success" className='w-100 mb-3' onClick={() => handleShow()}>
       								{t('userPage.btnCreate')}
       							</Button>
@@ -104,7 +118,12 @@ function Profile() {
 								<Tags tags={onTags} setOnTags={setOnTags}/>
 							</Col>
 							<Col>
-								{   (reviewsByAutor.length != 0) 
+								{   
+                                    adminPanel 
+                                    ?
+                                    <AdminPanel />
+                                    :
+                                    (reviewsByAutor.length != 0) 
 									?
 									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
 									: <h3 className='text-center mt-3'>{t('userPage.reviewNotFound')}</h3>

@@ -100,8 +100,9 @@ function CardReview(props:any) {
                                 <small><i className={`bi bi-heart${(userLike)?'-fill':''}`}></i></small>
                             </Button>
                             {
-                                user && 
-                                (JSON.parse(user)._id === props.autor) 
+                                user
+                                &&
+                                ((JSON.parse(user)._id === props.autor) || (JSON.parse(user).isAdmin === 'true'))
                                 ? 
                                     <>
                                         <Button variant="outline-secondary border-0" onClick={() => props.handleShow()}>
@@ -111,7 +112,7 @@ function CardReview(props:any) {
                                             <small><i className="bi bi-trash3"></i></small>
                                         </Button>
                                     </>
-                                : ''
+                                : ""
                             }
                         </Col>
                     </Row>

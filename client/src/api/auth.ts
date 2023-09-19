@@ -6,8 +6,6 @@ export const getUser = async (_id: string, setUser: any) => {
         const  response  = await axios.post(`${urlAPI}/api/auth/login`, {
             _id,
         })
-        localStorage.setItem('accessToken', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user))
         setUser(response.data.user)
     } catch (error) {
         console.log(error)
@@ -51,5 +49,14 @@ export const getUserByToken = async (token: string, setUser: any, setWarning: an
     } catch (error: any) {
         console.log(error.response.data.message)
         setWarning(true);
+    }
+}
+
+export const getAllUsers = async (setUsers: any) => {
+	try {
+        const  response  = await axios.get(`${urlAPI}/api/auth/users`)
+        setUsers(response.data)
+    } catch (error: any) {
+        console.log(error.response.data.message)
     }
 }

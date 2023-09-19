@@ -3,7 +3,7 @@ export interface IUser {
     name: string,
     loginWith: string,
     email: string,
-    isAdmin: boolean,
+    isAdmin: string,
     img: string
     login: string
 }

@@ -195,4 +195,14 @@ router.put('/admin/:id', async(req, res) => {
     }
 })
 
+router.get('/users', async(req, res) => {
+    try {
+        const users = await User.find();
+        return res.status(200).json(users);
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
 module.exports = router
