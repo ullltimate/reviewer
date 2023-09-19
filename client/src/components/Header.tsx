@@ -11,6 +11,7 @@ function Header(props: any) {
 	const navigate = useNavigate();
     const [userObject, setUserObject] = useState<IUser>();
     const [searchValue, setSearchValue] = useState('');
+    const [emptySearch, setEmptySearch] = useState(false);
 
     useEffect(() => {
         if (user) setUserObject(JSON.parse(user))
@@ -37,8 +38,14 @@ function Header(props: any) {
 		navigate("/login")
 	}
 
-    const search = () => {
-        navigate(`/search?searchTerm=${searchValue}`);
+    const search = (e: any) => {
+        e.preventDefault();
+        if(searchValue.trim() != ''){
+            setEmptySearch(false);
+            navigate(`/search?searchTerm=${searchValue}`);
+        } else {
+            setEmptySearch(true);
+        }
     }
 
     return (
@@ -80,12 +87,13 @@ function Header(props: any) {
                     <Form.Control
                       type="search"
                       placeholder={props.t('header.search')}
-                      className="me-2"
+                      className={`me-2 ${emptySearch ? 'border border-danger' : ''}`}
                       aria-label="Search"
                       value={searchValue}
+                      required
                       onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <Button variant="outline-success" onClick={search}>
+                    <Button variant="outline-success" type='submit' onClick={search}>
                         {props.t('header.search')}
                     </Button>
                 </Form>
