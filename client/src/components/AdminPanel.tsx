@@ -4,6 +4,7 @@ import { getAllUsers } from "../api/auth";
 import { IUser } from "../types/types";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Loader from "./Loader";
 
 function AdminPanel() {
     const { t } = useTranslation();
@@ -15,6 +16,9 @@ function AdminPanel() {
 
   	return (
   	  <>
+        {
+            users 
+            ?
             <Table bordered hover>
                 <thead>
                     <tr>
@@ -26,11 +30,12 @@ function AdminPanel() {
                 </thead>
                 <tbody>
                     {
-                    users
-                    && users.map((e, i) => <tr key={e._id}><td>{i+1}</td><td><Link to={`/user/${e._id}`}>{e.login}</Link></td><td>{e.email}</td><td>{e.loginWith}</td></tr>)
+                        users.map((e, i) => <tr key={e._id}><td>{i+1}</td><td><Link to={`/user/${e._id}`}>{e.login}</Link></td><td>{e.email}</td><td>{e.loginWith}</td></tr>)
                     }
                 </tbody>
             </Table>
+            : <Loader />
+        }
   	  </>
   	)
 }
