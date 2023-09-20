@@ -5,8 +5,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { getReview, removeReview } from '../api/reviews';
 import { IReview } from '../types/types';
-import ReactStars from 'react-rating-star-with-type';
-import { addRating, getRating } from '../api/rating';
 import CreateReview from './CreateReview';
 import { addComment, getComments } from '../api/comments';
 import { checkInputs, convertDate, resetInputs } from '../healpers/healper';
@@ -15,6 +13,7 @@ import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import Loader from './Loader';
 import { usePDF } from 'react-to-pdf';
 import ButtonLike from './ButtonLike';
+import ButtonRating from './ButtonRating';
 
 function Review() {
     const params = useParams();
@@ -22,8 +21,6 @@ function Review() {
     const [review, setReview] = useState<IReview>();
     const { t, i18n: {language} } = useTranslation();
     const user = localStorage.getItem('user');
-    const [star, setStar] = useState(0);
-    const [editStar, setEditStar] = useState(true);
     const [rating, setRating] = useState(0);
     const navigate = useNavigate();
     const [amountLikes, setAmountLikes] = useState(0);
@@ -43,21 +40,7 @@ function Review() {
         idReview && setInterval(() => getComments(idReview, setComments), 2000);
     },[])
 
-    useEffect(()=>{
-        (user && idReview) ? getRating(idReview, setRating, JSON.parse(user)._id, setStar, setEditStar,) : (idReview) && getRating(idReview, setRating);
-    },[star])
-
     const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
-
-    async function rate(nextValue: any){
-        if(user && idReview){
-            await addRating(idReview, JSON.parse(user)._id, nextValue);
-            setStar(nextValue);
-            setEditStar(false);
-        } else {
-            navigate('/login');
-        }
-    }
 
     async function sendComment() {
         if(user && idReview){
@@ -116,14 +99,7 @@ function Review() {
                                     <p className='mb-0'>{t('review.tags')} #{review.tags.map((e:any) => e).join('#')}</p>
                                 </Col>
                                 <Col className='text-end'>
-                                    <ReactStars 
-                                        key={`stars_${star}`}
-                                        onChange={rate} 
-                                        value={star}
-                                        isEdit={editStar}  
-                                        activeColors={["#ffc107"]} 
-                                        style={{justifyContent: 'end'}}
-                                    />
+                                    <ButtonRating idReview={idReview} setRating={setRating}/>
                                 </Col>
                             </Row>
                             <Row className='align-items-center'>

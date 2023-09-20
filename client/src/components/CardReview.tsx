@@ -1,32 +1,14 @@
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { removeReview } from '../api/reviews';
-import { useEffect, useState } from 'react';
-import ReactStars from 'react-rating-star-with-type';
-import { addRating, getRating } from '../api/rating';
+import { useState } from 'react';
 import ButtonLike from './ButtonLike';
+import ButtonRating from './ButtonRating';
 
 function CardReview(props:any) {
     const user = localStorage.getItem('user');
     const [amountLikes, setAmountLikes] = useState(0);
-    const navigate = useNavigate();
-    const [star, setStar] = useState(0);
-    const [editStar, setEditStar] = useState(true);
     const [rating, setRating] = useState(0);
-
-    useEffect(()=>{
-        (user) ? getRating(props.id, setRating, JSON.parse(user)._id, setStar, setEditStar,) : getRating(props.id, setRating);
-    },[star])
-
-    async function rate(nextValue: any){
-        if(user){
-            await addRating(props.id, JSON.parse(user)._id, nextValue);
-            setStar(nextValue);
-            setEditStar(false);
-        } else {
-            navigate('/login');
-        }
-    }
 
   	return (
   	  <>
@@ -60,14 +42,7 @@ function CardReview(props:any) {
                             <Button variant="link" className='px-0'><Link to={`/review/${props.id}`}>{props.t('cardReview.viewMore')}</Link></Button>
                         </Col>
                         <Col>
-                            <ReactStars 
-                                key={`stars_${star}`}
-                                onChange={rate} 
-                                value={star}
-                                isEdit={editStar}  
-                                activeColors={["#ffc107"]} 
-                                style={{justifyContent: 'end'}}
-                            />
+                            <ButtonRating idReview={props.id} setRating={setRating}/>
                         </Col>
                     </Row>
       		    </Card.Body>
