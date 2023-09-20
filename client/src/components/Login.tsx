@@ -2,7 +2,6 @@ import {  Button, Card, Col, Container, Row } from 'react-bootstrap';
 import Header from './Header';
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from 'react';
-import { useTheme } from '../hooks/useTheme';
 import { useGoogleLogin } from "@react-oauth/google"
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserGoogle } from '../api/auth';
@@ -10,7 +9,6 @@ import Loader from './Loader';
 
 function Login() {
 	const { t } = useTranslation();
-	const {theme} = useTheme();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const searchParams = new URLSearchParams(useLocation().search);
@@ -52,10 +50,10 @@ function Login() {
     				  			<Card.Body>
 								  	<Card.Title className='mb-3'>{t('loginPage.title')}</Card.Title>
 									<div className="d-grid gap-2">
-      									<Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => loginToGithub()}>
+      									<Button variant='secondary' onClick={() => loginToGithub()}>
 										  <i className="bi bi-github"></i> {t('loginPage.btnGithub')}
 										</Button>
-										<Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => loginToGoogle()}>
+										<Button variant='secondary' onClick={() => loginToGoogle()}>
 											<i className="bi bi-google"></i>{t('loginPage.btnGoogle')}
 										</Button>
 									</div>
