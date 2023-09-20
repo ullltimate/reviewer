@@ -21,7 +21,7 @@ function AdminPanel() {
         {
             users 
             ?
-            <Table bordered hover>
+            <Table className="mt-3" bordered hover>
                 <thead>
                     <tr>
                         <th>#</th>
