@@ -116,7 +116,7 @@ function Review() {
                                             <Button variant="outline-secondary border-0" onClick={() => handleShowEdit(review._id)}>
                                                 <small><i className="bi bi-pencil-square"></i></small>
                                             </Button>
-                                            <Button variant="outline-secondary border-0" onClick={() => {removeReview(review._id); navigate(`/user/${JSON.parse(user)._id}`)}}>
+                                            <Button variant="outline-secondary border-0" onClick={() => {removeReview(review._id); navigate(`/profile`)}}>
                                                 <small><i className="bi bi-trash3"></i></small>
                                             </Button>
                                         </>
