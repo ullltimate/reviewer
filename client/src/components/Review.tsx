@@ -7,7 +7,6 @@ import { getReview, removeReview } from '../api/reviews';
 import { IReview } from '../types/types';
 import ReactStars from 'react-rating-star-with-type';
 import { addRating, getRating } from '../api/rating';
-import { addLikes, deleteLikes, getLikes } from '../api/likes';
 import CreateReview from './CreateReview';
 import { addComment, getComments } from '../api/comments';
 import { checkInputs, convertDate, resetInputs } from '../healpers/healper';
@@ -15,6 +14,7 @@ import CardComment from './CardComment';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import Loader from './Loader';
 import { usePDF } from 'react-to-pdf';
+import ButtonLike from './ButtonLike';
 
 function Review() {
     const params = useParams();
@@ -26,7 +26,6 @@ function Review() {
     const [editStar, setEditStar] = useState(true);
     const [rating, setRating] = useState(0);
     const navigate = useNavigate();
-    const [userLike, setUserLike] = useState(false);
     const [amountLikes, setAmountLikes] = useState(0);
     const [showCreate, setShowCreate] = useState<boolean>(false);
     const [edit, setEdit] = useState(false);
@@ -48,25 +47,7 @@ function Review() {
         (user && idReview) ? getRating(idReview, setRating, JSON.parse(user)._id, setStar, setEditStar,) : (idReview) && getRating(idReview, setRating);
     },[star])
 
-    useEffect(() => {
-        (user && idReview) ? getLikes(idReview, setAmountLikes, JSON.parse(user)._id, setUserLike) : (idReview) && getLikes(idReview, setAmountLikes);
-    },[userLike])
-
     const handleShowEdit = (idReview: string) => {setEditReview(idReview); setEdit(true); setShowCreate(true)};
-
-    function like(){
-        if(user && idReview){
-            if(userLike){
-                deleteLikes(idReview, JSON.parse(user)._id);
-                setUserLike(false);
-            }else{
-                (review) && addLikes(idReview, review.idAutor, JSON.parse(user)._id);
-                setUserLike(true);
-            }
-        } else{
-            navigate('/login');
-        }
-    }
 
     async function rate(nextValue: any){
         if(user && idReview){
@@ -150,9 +131,7 @@ function Review() {
                                     <p className='mb-0'>{t('review.posted')} {convertDate(language, review.creationDate)}</p>
                                 </Col>
                                 <Col className='text-end'>
-                                    <Button variant="outline-secondary border-0" onClick={() => like()}>
-                                        <small><i className={`bi bi-heart${(userLike)?'-fill':''}`}></i></small>
-                                    </Button>
+                                    <ButtonLike idReview={idReview} setAmountLikes={setAmountLikes} idAutor={review.idAutor}/>
                                     {
                                     user && 
                                     (JSON.parse(user)._id === review.idAutor) 
