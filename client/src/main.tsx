@@ -11,6 +11,7 @@ import './i18n';
 import User from './components/User.tsx';
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import Search from './components/Search.tsx';
+import Profile from './components/Profile.tsx';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/search",
     element: <Search />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 

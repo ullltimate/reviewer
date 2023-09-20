@@ -5,18 +5,16 @@ import { Accordion, Button, Col, Container, Pagination, Row, Tab, Tabs } from 'r
 import { useEffect, useState } from 'react';
 import CardReview from './components/CardReview';
 import { useTranslation } from "react-i18next";
-import { useTheme } from './hooks/useTheme';
 import { filteredByTags, getAllTags } from './api/reviews';
 import { IReview, ITagCloud } from './types/types';
 import CreateReview from './components/CreateReview';
 import Loader from './components/Loader';
 import { TagCloud } from 'react-tagcloud'
+import { convertDate } from './healpers/healper';
 
 function App() {
 	const [key, setKey] = useState('recent');
-	const { t, i18n: {changeLanguage, language} } = useTranslation();
-	const [currentLanguage, setCurrentLanguage] = useState(language);
-	const {theme, setTheme} = useTheme();
+	const { t, i18n: {language} } = useTranslation();
 	const [allReviews, setAllReviews] = useState<IReview[] | null>(null);
 	const [pageReview, setPageReview] = useState<IReview[] | null>(null);
 	const [showCreate, setShowCreate] = useState<boolean>(false);
@@ -54,11 +52,11 @@ function App() {
 
 	useEffect(() => {
 		filteredByTags(onTags, key, setAllReviews, setAmountAllReviews)
-	},[isDeleted, key, onTags])
+	},[isDeleted, key, onTags, showCreate])
 
   	return (
   	  <>
-		<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
+		<Header />
 		<Container>
 			<Accordion>
       			<Accordion.Item eventKey="0" className='border-0 mt-5'>
@@ -96,7 +94,7 @@ function App() {
 				  	{
 						pageReview
 						?
-						pageReview.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
+						pageReview.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={convertDate(language, el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
 						:
 						<Loader />
 					}
@@ -106,7 +104,7 @@ function App() {
 				  	{
 						pageReview 
 						?
-						pageReview.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={Intl.DateTimeFormat(currentLanguage).format(el.creationDate)} t={t}  handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
+						pageReview.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={convertDate(language, el.creationDate)} t={t}  handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
 						:
 						<Loader />
 					}

@@ -1,19 +1,20 @@
 import {  Button, Card, Col, Container, Row } from 'react-bootstrap';
 import Header from './Header';
 import { useTranslation } from "react-i18next";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useGoogleLogin } from "@react-oauth/google"
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserGoogle } from '../api/auth';
 import Loader from './Loader';
 
 function Login() {
-	const { t, i18n: {changeLanguage, language} } = useTranslation();
-	const [currentLanguage, setCurrentLanguage] = useState(language);
-	const {theme, setTheme} = useTheme();
+	const { t } = useTranslation();
+	const {theme} = useTheme();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+	const searchParams = new URLSearchParams(useLocation().search);
+    const searchString = searchParams.get('token');
 
 	const GITHUB_CLIENT_ID: string = import.meta.env.VITE_GITHUB_CLIENT_ID;
 
@@ -29,9 +30,16 @@ function Login() {
 		},
 	})
 
+	useEffect(() => {
+		if(searchString){
+			localStorage.setItem("accessToken", searchString);
+			navigate('/profile');
+		}
+	},[])
+
   	return (
   	  	<>
-		  	<Header currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} changeLanguage={changeLanguage} t={t} theme={theme} setTheme={setTheme}/>
+		  	<Header />
 			{
 				loading 
 				?

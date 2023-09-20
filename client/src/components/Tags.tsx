@@ -9,7 +9,7 @@ function Tags(props: any){
     }
     return(
         <>
-            <Stack direction="horizontal" gap={1} className='flex-wrap'>
+            <Stack direction="horizontal" gap={1} className='flex-wrap mb-3'>
 				{tags.filter((el: any)=> typeof el === 'string' && el !== '').map((el:any, i:any) => 
 				<Badge role='button' pill bg={`${changeColor()}`} className="bg-opacity-50" key={i} onClick={() => removeTag(el, tags)}>
     			  {el} <i className="bi bi-x"></i>

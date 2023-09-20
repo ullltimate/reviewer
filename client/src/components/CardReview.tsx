@@ -1,51 +1,14 @@
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { removeReview } from '../api/reviews';
-import { useEffect, useState } from 'react';
-import { addLikes, deleteLikes, getLikes } from '../api/likes';
-import ReactStars from 'react-rating-star-with-type';
-import { addRating, getRating } from '../api/rating';
+import { useState } from 'react';
+import ButtonLike from './ButtonLike';
+import ButtonRating from './ButtonRating';
 
 function CardReview(props:any) {
     const user = localStorage.getItem('user');
     const [amountLikes, setAmountLikes] = useState(0);
-    const navigate = useNavigate();
-    const [userLike, setUserLike] = useState(false);
-    const [star, setStar] = useState(0);
-    const [editStar, setEditStar] = useState(true);
     const [rating, setRating] = useState(0);
-
-    useEffect(() => {
-        (user) ? getLikes(props.id, setAmountLikes, JSON.parse(user)._id, setUserLike) : getLikes(props.id, setAmountLikes);
-    },[userLike])
-
-    useEffect(()=>{
-        (user) ? getRating(props.id, setRating, JSON.parse(user)._id, setStar, setEditStar,) : getRating(props.id, setRating);
-    },[star])
-
-    function like(){
-        if(user){
-            if(userLike){
-                deleteLikes(props.id, JSON.parse(user)._id);
-                setUserLike(false);
-            }else{
-                addLikes(props.id, props.autor, JSON.parse(user)._id);
-                setUserLike(true);
-            }
-        } else{
-            navigate('/login');
-        }
-    }
-
-    async function rate(nextValue: any){
-        if(user){
-            await addRating(props.id, JSON.parse(user)._id, nextValue);
-            setStar(nextValue);
-            setEditStar(false);
-        } else {
-            navigate('/login');
-        }
-    }
 
   	return (
   	  <>
@@ -61,7 +24,7 @@ function CardReview(props:any) {
                             <Card.Title>{props.name}</Card.Title>
                         </Col>
                         <Col className='text-end' md={2}>
-                            <span>{rating.toFixed(1)}</span>
+                            <span>{`${rating.toFixed(1)} `}</span>
                             <i className="bi bi-star-fill text-warning"></i>
                         </Col>
                     </Row>
@@ -79,14 +42,7 @@ function CardReview(props:any) {
                             <Button variant="link" className='px-0'><Link to={`/review/${props.id}`}>{props.t('cardReview.viewMore')}</Link></Button>
                         </Col>
                         <Col>
-                            <ReactStars 
-                                key={`stars_${star}`}
-                                onChange={rate} 
-                                value={star}
-                                isEdit={editStar}  
-                                activeColors={["#ffc107"]} 
-                                style={{justifyContent: 'end'}}
-                            />
+                            <ButtonRating idReview={props.id} setRating={setRating}/>
                         </Col>
                     </Row>
       		    </Card.Body>
@@ -96,12 +52,11 @@ function CardReview(props:any) {
                             <small className="text-muted">{props.t('cardReview.posted')} {props.postedDate}</small>
                         </Col>
                         <Col className='p-0 text-end'>
-                            <Button variant="outline-secondary border-0" onClick={() => like()}>
-                                <small><i className={`bi bi-heart${(userLike)?'-fill':''}`}></i></small>
-                            </Button>
+                            <ButtonLike idReview={props.id} setAmountLikes={setAmountLikes} idAutor={props.autor}/>
                             {
-                                user && 
-                                (JSON.parse(user)._id === props.autor) 
+                                user
+                                &&
+                                ((JSON.parse(user)._id === props.autor) || (JSON.parse(user).isAdmin === 'true'))
                                 ? 
                                     <>
                                         <Button variant="outline-secondary border-0" onClick={() => props.handleShow()}>
@@ -111,7 +66,7 @@ function CardReview(props:any) {
                                             <small><i className="bi bi-trash3"></i></small>
                                         </Button>
                                     </>
-                                : ''
+                                : ""
                             }
                         </Col>
                     </Row>

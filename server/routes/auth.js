@@ -40,8 +40,18 @@ router.get('/github/accessToken', async (req, res) => {
                 }),
             })
             const dataUserApp = await responseUserAPP.json();
+            const responseToken = await fetch(`https://reviewer-server-dkmy.onrender.com/api/auth/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    _id: dataUserApp
+                }),
+            })
+            const userToken = await responseToken.json();
             res.redirect(
-                `https://fanciful-klepon-4f42e9.netlify.app/user/${dataUserApp}`
+                `https://fanciful-klepon-4f42e9.netlify.app/login/?token=${userToken.token}`
               );
         } else {
             return res.status(400).json({message: `bad token GitHub`})
@@ -137,7 +147,7 @@ router.post('/login', async (req, res) => {
         if (!user){
             return res.status(404).json({message: "User with this id not found"});
         }
-        const token = jwt.sign({id: user.id}, process.env.SECRET_KEY, {expiresIn:"1h"});
+        const token = jwt.sign({id: user.id}, process.env.SECRET_KEY, {expiresIn: 60*60});
         return res.json({
             token,
             user: user
@@ -148,5 +158,51 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.post('/auth', async (req, res) => {
+    try {
+        const {token} = req.body;
+        let _id;
+        const decoded = jwt.verify(token, process.env.SECRET_KEY, function(err, decoded) {
+            if (err) {
+                return res.status(400).json({message: "Token has expired"});
+            } else {
+                _id = decoded.id;
+            }
+        });
+        if (_id) {
+            const user = await User.findOne({_id});
+            return res.status(200).json(user);
+        }
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
+router.put('/admin/:id', async(req, res) => {
+    try {
+        const _id = req.params.id;
+        const {isAdmin} = req.body;
+        const user = await User.findOne({_id});
+        if(!user){
+            return res.status(404).json({message: "User with this id not found"});
+        }
+        await User.updateOne({_id}, {$set: {isAdmin: isAdmin}});
+        return res.status(200).json({message: `User ${_id} is admin`});
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
+
+router.get('/users', async(req, res) => {
+    try {
+        const users = await User.find();
+        return res.status(200).json(users);
+    } catch (e) {
+        console.log(e);
+        res.send({message: 'Server error'});
+    }
+})
 
 module.exports = router
