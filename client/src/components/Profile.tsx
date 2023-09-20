@@ -3,7 +3,6 @@ import { getUserByToken } from "../api/auth";
 import { IReview, IUser } from "../types/types";
 import Header from "./Header";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "../hooks/useTheme";
 import { getAllTags, getReviewsByAutor } from "../api/reviews";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import CardReview from "./CardReview";
@@ -19,7 +18,6 @@ function Profile() {
     const accessToken = localStorage.getItem('accessToken');
     const [user, setUser] = useState<IUser | null>(null);
     const { t, i18n: {language} } = useTranslation();
-	const {theme} = useTheme();
     const [showCreate, setShowCreate] = useState<boolean>(false);
 	const [reviewsByAutor, setReviewsByAutor] = useState<IReview[]>([]);
 	const [allTags, setAllTags] = useState<any[]>([]);
@@ -96,7 +94,7 @@ function Profile() {
                     ?
                     <div className="text-center mt-5">
                         <h3 className="my-3">Token has expired!</h3>
-                        <Button variant={theme === 'light' ? 'dark' : 'light'} onClick={() => navigate('/login')}>
+                        <Button variant='secondary' onClick={() => navigate('/login')}>
                             Login again!
 						</Button>
                     </div>
