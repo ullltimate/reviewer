@@ -6,6 +6,7 @@ import { IUser } from '../types/types';
 import Logo from './Logo';
 import { useTheme } from '../hooks/useTheme';
 import { useTranslation } from 'react-i18next';
+import { useResize } from '../hooks/useResize';
 
 function Header() {
     const { t, i18n: {changeLanguage, language} } = useTranslation();
@@ -16,6 +17,7 @@ function Header() {
     const [userObject, setUserObject] = useState<IUser>();
     const [searchValue, setSearchValue] = useState('');
     const [emptySearch, setEmptySearch] = useState(false);
+    const windowWidth = useResize();
 
     useEffect(() => {
         if (user) setUserObject(JSON.parse(user))
@@ -57,7 +59,7 @@ function Header() {
             <Container >
                 <Link to={"/"} className='d-flex align-items-center text-decoration-none text-reset'>
                     <Logo theme={theme}/>
-                    <h1 className='m-0'>reviewer</h1>
+                    <h1 className='m-0' style={{display: `${(windowWidth.windowSize>767) ? 'block' : 'none'}`}}>reviewer</h1>
                 </Link>
                 <Nav className='align-items-center'>
                     {
