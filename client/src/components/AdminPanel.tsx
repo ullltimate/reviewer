@@ -43,8 +43,8 @@ function AdminPanel() {
             <>
                 <div className="mt-3 btn-toolbar justify-content-end">
                     <ButtonGroup>
-                        <Button variant="outline-danger" onClick={makeAdmin}>Make admin</Button>
-                        <Button variant="outline-danger" onClick={removeAdmin}>Remove admin</Button>
+                        <Button variant="outline-danger" onClick={makeAdmin}>{t('adminPanel.makeAdmin')}</Button>
+                        <Button variant="outline-danger" onClick={removeAdmin}>{t('adminPanel.removeAdmin')}</Button>
                     </ButtonGroup>
                 </div>
                 <Table className="mt-3" bordered hover>

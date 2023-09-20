@@ -70,6 +70,8 @@
         "login": "Login",
         "email": "Email",
         "loginWith": "Login with",
-        "isAdmin": "Admin"
+        "isAdmin": "Admin",
+        "makeAdmin": "Make admin",
+        "removeAdmin": "Remove admin"
     }
 }
