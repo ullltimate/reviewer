@@ -11,11 +11,11 @@ function ButtonRating(props:any) {
 
 
     useEffect(()=>{
-        (user && props.idReview) ? getRating(props.idReview, props.setRating, JSON.parse(user)._id, setStar, setEditStar,) : (props.idReview) && getRating(props.idReview, props.setRating);
+        (user) ? getRating(props.idReview, props.setRating, JSON.parse(user)._id, setStar, setEditStar) : getRating(props.idReview, props.setRating);
     },[star])
     
     async function rate(nextValue: any){
-        if(user && props.idReview){
+        if(user){
             await addRating(props.idReview, JSON.parse(user)._id, nextValue);
             setStar(nextValue);
             setEditStar(false);
