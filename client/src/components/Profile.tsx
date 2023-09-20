@@ -4,17 +4,16 @@ import { IReview, IUser } from "../types/types";
 import Header from "./Header";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../hooks/useTheme";
-import { filteredReviews, getAllTags, getReviewsByAutor } from "../api/reviews";
-import { getLikesByAutor } from "../api/likes";
-import { Container, Row, Col, Badge, Button, Image } from "react-bootstrap";
+import { getAllTags, getReviewsByAutor } from "../api/reviews";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import CardReview from "./CardReview";
 import CreateReview from "./CreateReview";
 import Loader from "./Loader";
-import Select from "./Select";
-import Tags from "./Tags";
 import { useNavigate } from "react-router-dom";
 import AdminPanel from "./AdminPanel";
 import { convertDate } from "../healpers/healper";
+import UserInfo from "./UserInfo";
+import FiltersPanel from "./FiltersPanel";
 
 function Profile() {
     const accessToken = localStorage.getItem('accessToken');
@@ -27,11 +26,7 @@ function Profile() {
 	const [onTags, setOnTags] = useState<any[]>([]);
 	const [edit, setEdit] = useState(false);
 	const [editReview, setEditReview] = useState('');
-	const [group, setGroup] = useState('');
-	const [tag, setTag] = useState('');
-	const [amoutLikes, setAmountLikes] = useState(0);
 	const [isDeleted, setIsDeleted] = useState(false);
-	const [sort, setSort] = useState('');
     const [warning, setWarning] = useState(false);
     const navigate = useNavigate();
     const [adminPanel, setAdminPanel] = useState(false);
@@ -55,22 +50,8 @@ function Profile() {
 		if (user) {
 			getAllTags(setAllTags, setOnTags)
 			getReviewsByAutor(user._id, setReviewsByAutor);
-			getLikesByAutor(user._id, setAmountLikes)
 		}
 	},[showCreate, user])
-
-	useEffect(() => {
-		if(tag != '') setOnTags(Array.from(new Set(onTags.concat(tag))))
-	}, [tag])
-
-	useEffect(() => {
-		if(user) filteredReviews(user._id, group, onTags, setReviewsByAutor)
-	},[group, onTags, isDeleted])
-
-	useEffect(() => {
-		if(sort === 'date') setReviewsByAutor(() => [...reviewsByAutor.sort((a,b) => b.creationDate - a.creationDate)]);
-		if(sort === 'rating') setReviewsByAutor(() => [...reviewsByAutor.sort((a,b) => b.averageRating - a.averageRating)]);
-	},[sort])
 
   	return (
   	  	<>
@@ -79,51 +60,37 @@ function Profile() {
 				{
 					user 
 					? 
-					<>
-						<Row>
-							<Col md={3} className='text-center'>
-								<Image src={user.img} className='mt-3' style={{ maxWidth: '8rem' }} roundedCircle />
-								<h5 className='mb-1'>{user.name}</h5>
-								<Badge bg="danger" className='mb-1'><i className="bi bi-suit-heart-fill"></i> {amoutLikes}</Badge>
-								<p className='mb-3'>{user.email}</p>
-                                {
-                                    user.isAdmin === 'true'
-                                    &&
-                                    <>
-                                        <Button variant="outline-danger" className='w-100 mb-3' onClick={() => setAdminPanel(true)}>
-                                            {t('adminPanel.btnAdmin')}
-                                        </Button>
-                                        <Button variant="outline-danger" className='w-100 mb-3' onClick={() => setAdminPanel(false)}>
-                                            {t('adminPanel.btnReview')}
-                                        </Button>
-                                    </>
-                                }
-								<Button variant="outline-success" className='w-100 mb-3' onClick={() => handleShow()}>
-      								{t('userPage.btnCreate')}
-      							</Button>
-								<Button variant="outline-success" className='w-100 mb-3' onClick={() => {setGroup(''); setTag(''); setOnTags(allTags); setSort('')}}>
-									{t('userPage.btnReset')}
-								</Button>
-								<CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''} alltags={allTags}/>
-								<Select name={t('userPage.sort')} options={['rating', 'date']} value={sort} setValue={setSort}/>
-								<Select name={t('userPage.groups')} options={['movies', 'books', 'games']} value={group} setValue={setGroup}/>
-								<Select name={t('userPage.tags')} options={allTags} value={tag} setValue={setTag}/>
-								<Tags tags={onTags} setOnTags={setOnTags}/>
-							</Col>
-							<Col>
-								{   
-                                    adminPanel 
-                                    ?
-                                    <AdminPanel />
-                                    :
-                                    (reviewsByAutor.length != 0) 
-									?
-									reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={convertDate(language, el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
-									: <h3 className='text-center mt-3'>{t('userPage.reviewNotFound')}</h3>
-								}
-							</Col>
-						</Row>
-					</>
+					<Row>
+						<Col md={3} className='text-center'>
+							<UserInfo user={user}/>
+                            {
+                                user.isAdmin === 'true'
+                                &&
+                                <>
+                                    <Button variant="outline-danger" className='w-100 mb-3' onClick={() => setAdminPanel(true)}>
+                                        {t('adminPanel.btnAdmin')}
+                                    </Button>
+                                    <Button variant="outline-danger" className='w-100 mb-3' onClick={() => setAdminPanel(false)}>
+                                        {t('adminPanel.btnReview')}
+                                    </Button>
+                                </>
+                            }
+							<CreateReview show={showCreate} onHide={() => setShowCreate(false)} update={(edit) ? `${editReview}` : ''} alltags={allTags}/>
+							<FiltersPanel onTags={onTags} setOnTags={setOnTags} handleShow={handleShow} allTags={allTags} idUser={user._id} isDeleted={isDeleted} setReviewsByAutor={setReviewsByAutor} reviewsByAutor={reviewsByAutor}/>
+						</Col>
+						<Col>
+							{   
+                                adminPanel 
+                                ?
+                                <AdminPanel />
+                                :
+                                (reviewsByAutor.length != 0) 
+								?
+								reviewsByAutor.map((el) => <CardReview key={el._id} id={el._id} autor={el.idAutor} img={el.img} name={el.nameReview} subtitle={el.title} score={el.score} postedDate={convertDate(language, el.creationDate)} t={t} handleShow={() => handleShowEdit(el._id)} setIsDeleted={setIsDeleted}/>)
+								: <h3 className='text-center mt-3'>{t('userPage.reviewNotFound')}</h3>
+							}
+						</Col>
+					</Row>
 					: 
                     warning 
                     ?
