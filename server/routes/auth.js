@@ -19,14 +19,14 @@ router.get('/github/accessToken', async (req, res) => {
         const data = await response.json();
         const token = data.access_token;
         if(token){
-            const responseUser = await fetch(`http://localhost:7000/api/auth/github/userData?accessToken=${token}`, {
+            const responseUser = await fetch(`https://reviewer-server-dkmy.onrender.com/api/auth/github/userData?accessToken=${token}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             })
             const dataUser = await responseUser.json();
-            const responseUserAPP = await fetch(`http://localhost:7000/api/auth/registration`, {
+            const responseUserAPP = await fetch(`https://reviewer-server-dkmy.onrender.com/api/auth/registration`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -40,7 +40,7 @@ router.get('/github/accessToken', async (req, res) => {
                 }),
             })
             const dataUserApp = await responseUserAPP.json();
-            const responseToken = await fetch(`http://localhost:7000/api/auth/login`, {
+            const responseToken = await fetch(`https://reviewer-server-dkmy.onrender.com/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -51,7 +51,7 @@ router.get('/github/accessToken', async (req, res) => {
             })
             const userToken = await responseToken.json();
             res.redirect(
-                `http://localhost:5173/login/?token=${userToken.token}`
+                `https://fanciful-klepon-4f42e9.netlify.app/login/?token=${userToken.token}`
               );
         } else {
             return res.status(400).json({message: `bad token GitHub`})
