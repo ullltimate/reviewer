@@ -69,6 +69,7 @@
         "btnReview": "Review panel",
         "login": "Login",
         "email": "Email",
-        "loginWith": "Login with"
+        "loginWith": "Login with",
+        "isAdmin": "Admin"
     }
 }

@@ -60,3 +60,16 @@ export const getAllUsers = async (setUsers: any) => {
         console.log(error.response.data.message)
     }
 }
+
+export const updateUserAdmin = async (id: string, isAdmin: string, setUpdate: any) => {
+	try {
+        setUpdate(true);
+        const response  = await axios.put(`${urlAPI}/api/auth/admin/${id}`, {
+            isAdmin
+        })
+        setUpdate(false)
+        console.log(response.data)
+    } catch (error: any) {
+        console.log(error.response.data.message)
+    }
+}
