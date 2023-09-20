@@ -86,7 +86,7 @@ function Review() {
                                     <h3>{review.title}</h3>
                                 </Col>
                                 <Col className='text-end'>
-                                    <span>{rating.toFixed(1)}</span>
+                                    <span>{`${rating.toFixed(1)} `}</span>
                                     <i className="bi bi-star-fill text-warning"></i>
                                     <br />
                                     <small><span className='text-secondary'>{t('cardReview.like')} {amountLikes}</span></small>
